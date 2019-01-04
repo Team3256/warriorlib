@@ -4,3 +4,5 @@ jdk:
 
 script:
   - ./gradlew build
+  - cd build/libs/
+  - ls
