@@ -1,11 +1,21 @@
 package frc.team3256.warriorlib.auto;
 
+/**
+ * Base class for autonomous modes
+ */
 public abstract class AutoModeBase {
-    protected double updateRate = 1.0/50.0;
+    protected double updateRate = 1.0 / 50.0;
     protected boolean active;
 
+    /**
+     * To be overriden; contains actual code to be executed when action is run
+     * @throws AutoModeEndedException
+     */
     protected abstract void routine() throws AutoModeEndedException;
 
+    /**
+     * To not be overriden; runs the code in {@link #routine()}
+     */
     public void run() {
         active = true;
         try {

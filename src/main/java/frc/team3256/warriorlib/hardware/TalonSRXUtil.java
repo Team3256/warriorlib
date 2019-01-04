@@ -1,16 +1,27 @@
 package frc.team3256.warriorlib.hardware;
 
 import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
- * Utility class to generate talon objects
+ * Utility class to generate Talon SRX objects
  */
-public class TalonUtil {
-    private static double controlLoopPeriod = 1.0/200.0;
+public class TalonSRXUtil {
+    /**
+     * How often the Talons are updated
+     */
+    private static double controlLoopPeriod = 1.0 / 200.0;
 
+    /**
+     * Generates a basic Talon SRX object
+     * @param id ID of the Talon SRX to be generated
+     * @return generated Talon SRX object
+     */
     public static TalonSRX generateGenericTalon(int id) {
         TalonSRX talon = new TalonSRX(id);
         talon.set(ControlMode.PercentOutput, 0);
@@ -44,7 +55,7 @@ public class TalonUtil {
         //no hard limits on default
         talon.overrideLimitSwitchesEnable(false);
         //no ramping on default
-        talon.configOpenloopRamp(0,10);
+        talon.configOpenloopRamp(0, 10);
         talon.configNominalOutputReverse(0, 10);
         talon.configNominalOutputForward(0, 10);
         talon.configPeakOutputForward(1.0, 10);
@@ -53,6 +64,12 @@ public class TalonUtil {
         return talon;
     }
 
+    /**
+     * Generates a "slave" Talon SRX object that follows after the given "master" Talon SRX ID
+     * @param id ID of the slave Talon SRX to be generated
+     * @param masterId ID of the master Talon SRX to follow after
+     * @return generated Talon SRX slave object
+     */
     public static TalonSRX generateSlaveTalon(int id, int masterId) {
         TalonSRX talon = new TalonSRX(id);
         talon.set(ControlMode.Follower, masterId);
@@ -94,52 +111,52 @@ public class TalonUtil {
         return talon;
     }
 
-    public static void setPIDGains(TalonSRX talon, int slot, double kP, double kI, double kD, double kF){
+    public static void setPIDGains(TalonSRX talon, int slot, double kP, double kI, double kD, double kF) {
         talon.config_kP(slot, kP, 0);
         talon.config_kI(slot, kI, 0);
         talon.config_kD(slot, kD, 0);
         talon.config_kF(slot, kF, 0);
     }
 
-    public static void configMagEncoder(TalonSRX talon){
-        if (talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0)!= ErrorCode.OK){
+    public static void configMagEncoder(TalonSRX talon) {
+        if (talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0) != ErrorCode.OK) {
             DriverStation.reportError("DID NOT DETECT MAG ENCODER ON TALON " + talon.getDeviceID(), false);
         }
-        talon.getStatusFramePeriod(StatusFrame.Status_2_Feedback0, (int)(1000*controlLoopPeriod));
+        talon.getStatusFramePeriod(StatusFrame.Status_2_Feedback0, (int) (1000 * controlLoopPeriod));
     }
 
-    public static void setCurrentLimit(TalonSRX talon, int peakAmps, int continuousAmps, int continuousDuration){
+    public static void setCurrentLimit(TalonSRX talon, int peakAmps, int continuousAmps, int continuousDuration) {
         talon.configPeakCurrentLimit(peakAmps, 0);
         talon.configContinuousCurrentLimit(continuousAmps, continuousDuration);
     }
 
-    public static void setBrakeMode(TalonSRX... talons){
-        for(TalonSRX talon : talons){
+    public static void setBrakeMode(TalonSRX... talons) {
+        for (TalonSRX talon : talons) {
             talon.setNeutralMode(NeutralMode.Brake);
         }
     }
 
-    public static void setCoastMode(TalonSRX... talons){
-        for(TalonSRX talon : talons){
+    public static void setCoastMode(TalonSRX... talons) {
+        for (TalonSRX talon : talons) {
             talon.setNeutralMode(NeutralMode.Coast);
         }
     }
 
-    public static void setPeakOutput(double peakFwd, double peakRev, TalonSRX... talons){
-        for(TalonSRX talon : talons){
+    public static void setPeakOutput(double peakFwd, double peakRev, TalonSRX... talons) {
+        for (TalonSRX talon : talons) {
             talon.configPeakOutputForward(peakFwd, 0);
             talon.configPeakOutputReverse(peakRev, 0);
         }
     }
 
-    public static void setMinOutput(double minFwd, double minRev, TalonSRX... talons){
-        for(TalonSRX talon : talons){
+    public static void setMinOutput(double minFwd, double minRev, TalonSRX... talons) {
+        for (TalonSRX talon : talons) {
             talon.configNominalOutputForward(minFwd, 0);
             talon.configNominalOutputReverse(minRev, 0);
         }
     }
 
     public static void setControlLoopPeriod(double controlLoopPeriod) {
-        TalonUtil.controlLoopPeriod = controlLoopPeriod;
+        TalonSRXUtil.controlLoopPeriod = controlLoopPeriod;
     }
 }

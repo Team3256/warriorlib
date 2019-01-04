@@ -1,5 +1,8 @@
 package frc.team3256.warriorlib.auto;
 
+/**
+ * Actions each represent a single task done, such as moving forward, raising an elevator, etc.
+ */
 public interface Action {
     /**
      * Returns whether or not the code has finished execution. When implementing this interface, this method is used by

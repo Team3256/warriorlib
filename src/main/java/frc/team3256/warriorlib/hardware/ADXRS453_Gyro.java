@@ -7,7 +7,10 @@ package frc.team3256.warriorlib.hardware;
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -28,7 +31,7 @@ import java.nio.ByteOrder;
  * <p>Modified by Team 3256
  */
 @SuppressWarnings({"TypeName", "AbbreviationAsWordInName", "PMD.UnusedPrivateField"})
-public class ADXRS453_Gyro extends GyroBase implements Gyro{
+public class ADXRS453_Gyro extends GyroBase implements Gyro {
     private static final double kSamplePeriod = 0.001;
     public static final double kCalibrationSampleTime = 5.0;
     private static final double kDegreePerSecondPerLSB = 0.0125;

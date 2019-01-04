@@ -18,6 +18,10 @@ public class ADXRS453_Calibrator implements Loop {
     public void init(double timestamp) {
     }
 
+    /**
+     * Calibrates the gyro if time since last calibration exceeds calibration sample time
+     * @param timestamp time of current execution
+     */
     @Override
     public void update(double timestamp) {
         if (timestamp - previousTime > ADXRS453_Gyro.kCalibrationSampleTime) {

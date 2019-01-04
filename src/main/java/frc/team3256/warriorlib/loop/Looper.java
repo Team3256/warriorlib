@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to run various control loop. {@link Loop}
+ * Class to run various control loops. {@link Loop}
  */
 public class Looper {
-
     private Notifier notifier;
     private List<Loop> loops;
     private boolean started;
