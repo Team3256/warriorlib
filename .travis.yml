@@ -12,7 +12,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
-  file: "/build/libs/warriorlib.jar"
+  file: "build/libs/warriorlib.jar"
   skip_cleanup: true
 
 script:
