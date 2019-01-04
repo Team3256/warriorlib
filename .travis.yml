@@ -4,5 +4,4 @@ jdk:
 
 script:
   - ./gradlew build
-  - cd build/libs/
-  - ls
+  - echo $GH_TOKEN
