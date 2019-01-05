@@ -11,7 +11,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'jaci.openrio.gradle.GradleRIO' version '2018.01.22'
-    id 'maven-publishing'
+    id 'maven-publish'
 }
 
 sourceCompatibility = 1.8
