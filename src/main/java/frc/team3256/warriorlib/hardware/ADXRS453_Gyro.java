@@ -7,12 +7,12 @@ package frc.team3256.warriorlib.hardware;
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+import edu.wpi.first.hal.FRCNetComm;
+import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.hal.FRCNetComm.tResourceType;
-import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
@@ -83,7 +83,7 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro {
 
         calibrate();
 
-        HAL.report(tResourceType.kResourceType_ADXRS450, port.value);
+        HAL.report(FRCNetComm.tResourceType.kResourceType_ADXRS450, port.value);
         LiveWindow.addSensor("ADXRS453_Gyro", port.value, this);
     }
 
