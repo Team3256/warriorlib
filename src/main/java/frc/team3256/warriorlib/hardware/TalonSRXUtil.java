@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
@@ -22,8 +22,8 @@ public class TalonSRXUtil {
      * @param id ID of the Talon SRX to be generated
      * @return generated Talon SRX object
      */
-    public static TalonSRX generateGenericTalon(int id) {
-        TalonSRX talon = new TalonSRX(id);
+    public static WPI_TalonSRX generateGenericTalon(int id) {
+        WPI_TalonSRX talon = new WPI_TalonSRX(id);
         talon.set(ControlMode.PercentOutput, 0);
         //setup frame periods
         /*
@@ -70,8 +70,8 @@ public class TalonSRXUtil {
      * @param masterId ID of the master Talon SRX to follow after
      * @return generated Talon SRX slave object
      */
-    public static TalonSRX generateSlaveTalon(int id, int masterId) {
-        TalonSRX talon = new TalonSRX(id);
+    public static WPI_TalonSRX generateSlaveTalon(int id, int masterId) {
+        WPI_TalonSRX talon = new WPI_TalonSRX(id);
         talon.set(ControlMode.Follower, masterId);
         //we don't really need slaves to update fast, so update at 1hz
         /*talon.setControlFramePeriod(ControlFrame.Control_3_General, 1000);
@@ -111,46 +111,46 @@ public class TalonSRXUtil {
         return talon;
     }
 
-    public static void setPIDGains(TalonSRX talon, int slot, double kP, double kI, double kD, double kF) {
+    public static void setPIDGains(WPI_TalonSRX talon, int slot, double kP, double kI, double kD, double kF) {
         talon.config_kP(slot, kP, 0);
         talon.config_kI(slot, kI, 0);
         talon.config_kD(slot, kD, 0);
         talon.config_kF(slot, kF, 0);
     }
 
-    public static void configMagEncoder(TalonSRX talon) {
+    public static void configMagEncoder(WPI_TalonSRX talon) {
         if (talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0) != ErrorCode.OK) {
             DriverStation.reportError("DID NOT DETECT MAG ENCODER ON TALON " + talon.getDeviceID(), false);
         }
         talon.getStatusFramePeriod(StatusFrame.Status_2_Feedback0, (int) (1000 * controlLoopPeriod));
     }
 
-    public static void setCurrentLimit(TalonSRX talon, int peakAmps, int continuousAmps, int continuousDuration) {
+    public static void setCurrentLimit(WPI_TalonSRX talon, int peakAmps, int continuousAmps, int continuousDuration) {
         talon.configPeakCurrentLimit(peakAmps, 0);
         talon.configContinuousCurrentLimit(continuousAmps, continuousDuration);
     }
 
-    public static void setBrakeMode(TalonSRX... talons) {
-        for (TalonSRX talon : talons) {
+    public static void setBrakeMode(WPI_TalonSRX... talons) {
+        for (WPI_TalonSRX talon : talons) {
             talon.setNeutralMode(NeutralMode.Brake);
         }
     }
 
-    public static void setCoastMode(TalonSRX... talons) {
-        for (TalonSRX talon : talons) {
+    public static void setCoastMode(WPI_TalonSRX... talons) {
+        for (WPI_TalonSRX talon : talons) {
             talon.setNeutralMode(NeutralMode.Coast);
         }
     }
 
-    public static void setPeakOutput(double peakFwd, double peakRev, TalonSRX... talons) {
-        for (TalonSRX talon : talons) {
+    public static void setPeakOutput(double peakFwd, double peakRev, WPI_TalonSRX... talons) {
+        for (WPI_TalonSRX talon : talons) {
             talon.configPeakOutputForward(peakFwd, 0);
             talon.configPeakOutputReverse(peakRev, 0);
         }
     }
 
-    public static void setMinOutput(double minFwd, double minRev, TalonSRX... talons) {
-        for (TalonSRX talon : talons) {
+    public static void setMinOutput(double minFwd, double minRev, WPI_TalonSRX... talons) {
+        for (WPI_TalonSRX talon : talons) {
             talon.configNominalOutputForward(minFwd, 0);
             talon.configNominalOutputReverse(minRev, 0);
         }
