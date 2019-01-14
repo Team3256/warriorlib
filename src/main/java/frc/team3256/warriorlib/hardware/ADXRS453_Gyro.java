@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
  */
 @SuppressWarnings({"TypeName", "AbbreviationAsWordInName", "PMD.UnusedPrivateField"})
 public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, Sendable {
-    private static final double kSamplePeriod = 0.0005;
+    private static final double kSamplePeriod = 0.001;
     private static final double kCalibrationSampleTime = 5.0;
     private static final double kDegreePerSecondPerLSB = 0.0125;
 
@@ -81,7 +81,7 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, Sendable
         calibrate();
 
         HAL.report(tResourceType.kResourceType_ADXRS450, port.value);
-        setName("ADXRS450_Gyro", port.value);
+        setName("ADXRS453_Gyro", port.value);
     }
 
     public boolean isConnected() {
