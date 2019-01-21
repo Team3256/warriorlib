@@ -14,7 +14,7 @@ public class SparkMAXUtil {
     private static double controlLoopPeriod = 1.0/200.0;
 
     /**
-     *
+     * Creates a basic Spark MAX object
      * @param id ID of the SparkMAX to be generated
      * @param type Type of motor connected to SparkMAX (brushed or brushless)
      * @return Generated SparkMAX object
@@ -26,7 +26,7 @@ public class SparkMAXUtil {
     }
 
     /**
-     *
+     * Generates a "slave" Spark MAX object that follows after the given "master" Spark MAX ID
      * @param id ID of the SparkMAX to be generated
      * @param type Type of motor connected to SparkMAX (brushed or brushless)
      * @param masterSpark Master SparkMAX to follow
@@ -40,7 +40,7 @@ public class SparkMAXUtil {
     }
 
     /**
-     *
+     * Sets the PID Gains for the specified PIDController
      * @param sparkPIDController SparkMAX PIDController object to set gains for
      * @param slot Value from 0 to 3. Each slot has its own set of gain values
      * @param kP Proportional gain value
@@ -58,7 +58,7 @@ public class SparkMAXUtil {
     }
 
     /**
-     *
+     * Limits the current draw
      * @param limit Max current draw
      * @param sparks SparkMAX objects
      */
@@ -69,7 +69,7 @@ public class SparkMAXUtil {
     }
 
     /**
-     *
+     * Limits the current draw for when the motor is stalled and free
      * @param stallLimit Current limit at maximum torque
      * @param freeLimit Current limit when motor runs freely
      * @param sparks SparkMAX objects
@@ -81,7 +81,8 @@ public class SparkMAXUtil {
     }
 
     /**
-     *
+     * Limits the current draw for when the motor is stalled and free
+     * Limits the max rpm of the motor
      * @param stallLimit Current limit at maximum torque
      * @param freeLimit Current limit when motor runs freely
      * @param rpmLimit Max rpm motor is allowed to run at
@@ -94,7 +95,7 @@ public class SparkMAXUtil {
     }
 
     /**
-     *
+     * Sets the motors to brake
      * @param sparks SparkMAX objects
      */
     public static void setBrakeMode(CANSparkMax ... sparks) {
@@ -104,7 +105,7 @@ public class SparkMAXUtil {
     }
 
     /**
-     *
+     * Sets the motors to coast
      * @param sparks SparkMAX objects
      */
     public static void setCoastMode(CANSparkMax ... sparks) {
@@ -114,7 +115,7 @@ public class SparkMAXUtil {
     }
 
     /**
-     *
+     * Sets the amount of secodns it takes to go from 0 power to full throttle
      * @param seconds Amount of time in seconds SparkMAX takes to ramp to full throttle
      * @param sparks SparkMAX objects
      */
