@@ -12,13 +12,13 @@ public class SparkMAXUtil {
      */
     private static double controlLoopPeriod = 1.0/200.0;
 
-    private static CANSparkMax generateGenericSparkMAX (int id, CANSparkMaxLowLevel.MotorType type){
+    public static CANSparkMax generateGenericSparkMAX (int id, CANSparkMaxLowLevel.MotorType type){
         CANSparkMax sparkMax = new CANSparkMax(id, type);
         sparkMax.setInverted(false);
         return sparkMax;
     }
 
-    private static CANSparkMax generateSlaveSparkMAX (int id, CANSparkMaxLowLevel.MotorType type, CANSparkMax masterSpark){
+    public static CANSparkMax generateSlaveSparkMAX (int id, CANSparkMaxLowLevel.MotorType type, CANSparkMax masterSpark){
         CANSparkMax sparkMax = new CANSparkMax(id, type);
         sparkMax.follow(masterSpark);
         sparkMax.setInverted(false);
