@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public class PurePursuitTracker {
     private static PurePursuitTracker instance;
-    private int lastClosestPt;
-    private Path p;
+    private int lastClosestPoint;
+    private Path path;
     private double lookaheadDistance;
     private double robotTrack;
 
@@ -21,8 +21,8 @@ public class PurePursuitTracker {
         return instance == null ? instance = new PurePursuitTracker() : instance;
     }
 
-    public void setPath(Path p, double lookaheadDistance) {
-        this.p = p;
+    public void setPath(Path path, double lookaheadDistance) {
+        this.path = path;
         this.lookaheadDistance = lookaheadDistance;
     }
 
@@ -31,7 +31,7 @@ public class PurePursuitTracker {
     }
 
     public void reset() {
-        this.lastClosestPt = 0;
+        this.lastClosestPoint = 0;
     }
 
     //updates the motor controller values
@@ -39,20 +39,20 @@ public class PurePursuitTracker {
     public DrivePower update(Vector currPose, double currVel, double heading) {
         boolean onLastSegment = false;
         int closestPointIndex = getClosestPointIndex(currPose);
-        Vector lookaheadPt = new Vector(0, 0);
-        ArrayList<Vector> robotPath = p.getRobotPath();
+        Vector lookaheadPoint = new Vector(0, 0);
+        ArrayList<Vector> robotPath = path.getRobotPath();
         for (int i = closestPointIndex + 1; i < robotPath.size(); i++) {
-            Vector startPt = robotPath.get(i - 1);
-            Vector endPt = robotPath.get(i);
+            Vector startPoint = robotPath.get(i - 1);
+            Vector endPoint = robotPath.get(i);
             if (i == robotPath.size() - 1)
                 onLastSegment = true;
-            Optional<Vector> lookaheadPtOptional = calculateVectorLookAheadPoint(startPt, endPt, currPose, lookaheadDistance, onLastSegment);
+            Optional<Vector> lookaheadPtOptional = calculateVectorLookAheadPoint(startPoint, endPoint, currPose, lookaheadDistance, onLastSegment);
             if (lookaheadPtOptional.isPresent()) {
-                lookaheadPt = lookaheadPtOptional.get();
+                lookaheadPoint = lookaheadPtOptional.get();
                 break;
             }
         }
-        double curvature = p.calculateCurvatureLookAheadArc(currPose, heading, lookaheadPt, lookaheadDistance);
+        double curvature = path.calculateCurvatureLookAheadArc(currPose, heading, lookaheadPoint, lookaheadDistance);
         double leftTargetVel = calculateLeftTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
         double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
         /*
@@ -150,7 +150,7 @@ public class PurePursuitTracker {
     private Optional<Vector> calculateVectorLookAheadPoint(Vector startPoint, Vector endPoint, Vector currPos, double lookaheadDistance, boolean onLastSegment) {
         Optional<Double> tIntersect = calcIntersectionPoint(startPoint, endPoint, currPos, lookaheadDistance);
         if (tIntersect.isEmpty() && onLastSegment) {
-            return Optional.of(p.getRobotPath().get(p.getRobotPath().size() - 1));
+            return Optional.of(path.getRobotPath().get(path.getRobotPath().size() - 1));
         } else if (tIntersect.isEmpty()) {
             return Optional.empty();
         } else {
@@ -166,22 +166,22 @@ public class PurePursuitTracker {
     private int getClosestPointIndex(Vector currPos) {
         double shortestDistance = Double.MAX_VALUE;
         int closestPoint = 0;
-        ArrayList<Vector> robotPath = p.getRobotPath();
-        for (int i = lastClosestPt; i < robotPath.size(); i++) {
+        ArrayList<Vector> robotPath = path.getRobotPath();
+        for (int i = lastClosestPoint; i < robotPath.size(); i++) {
             if (Vector.dist(robotPath.get(i), currPos) < shortestDistance) {
                 closestPoint = i;
                 shortestDistance = Vector.dist(robotPath.get(i), currPos);
             }
         }
-        lastClosestPt = closestPoint;
+        lastClosestPoint = closestPoint;
         return closestPoint;
     }
 
     /*
     public int getClosestPoint(Vector currentPose) {
         double leastDistance = Double.MAX_VALUE;
-        int closestPointIndex = lastClosestPt+1;
-        ArrayList<Vector> robotPath = p.getRobotPath();
+        int closestPointIndex = lastClosestPoint+1;
+        ArrayList<Vector> robotPath = path.getRobotPath();
         for (int startVectorIndex = closestPointIndex; startVectorIndex < robotPath.size()-1; startVectorIndex++) {
             Vector startVector = robotPath.get(startVectorIndex);
             Vector endVector = robotPath.get(startVectorIndex + 1);
@@ -208,6 +208,6 @@ public class PurePursuitTracker {
     */
 
     public boolean isDone() {
-        return getClosestPointIndex(PoseEstimator.getInstance().getPose()) == p.getRobotPath().size() - 1;
+        return getClosestPointIndex(PoseEstimator.getInstance().getPose()) == path.getRobotPath().size() - 1;
     }
 }

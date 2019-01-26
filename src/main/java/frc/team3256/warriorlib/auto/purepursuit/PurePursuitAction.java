@@ -6,11 +6,11 @@ import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
 public class PurePursuitAction implements Action {
     private PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
-    private DriveTrainBase driveTrainBase;
+    private static DriveTrainBase driveTrainBase;
     private PoseEstimator poseEstimator = PoseEstimator.getInstance();
 
-    public PurePursuitAction(DriveTrainBase driveTrainBase) {
-        this.driveTrainBase = driveTrainBase;
+    public static void setDriveTrainBase(DriveTrainBase driveTrainBase) {
+        PurePursuitAction.driveTrainBase = driveTrainBase;
     }
 
     @Override
@@ -22,7 +22,6 @@ public class PurePursuitAction implements Action {
     public void update() {
         DrivePower drivePower = purePursuitTracker.update(poseEstimator.getPose(), driveTrainBase.getVelocity(), Math.toRadians(driveTrainBase.getAngle()) + (Math.PI / 2));
         driveTrainBase.setVelocityClosedLoop(drivePower.getLeft(), drivePower.getRight());
-        System.out.println(poseEstimator.getPose());
     }
 
     @Override

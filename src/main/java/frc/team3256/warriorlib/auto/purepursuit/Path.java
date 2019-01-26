@@ -3,10 +3,9 @@ package frc.team3256.warriorlib.auto.purepursuit;
 import frc.team3256.warriorlib.math.Vector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Path {
-	private double spacing; //spacing between points in inches
+    private double spacing; //spacing between points
 	private ArrayList<Vector> robotPath = new ArrayList<>();
 	private Vector endVector = new Vector(0, 0);
 
@@ -41,51 +40,14 @@ public class Path {
 		endVector = end;
 	}
 
-	public void addLastPoint() {
-		robotPath.add(endVector);
-	}
-
-	//methods to transfer to make arrays -> lists and list -> arrays
-
-	private double[][] makeArray(ArrayList<Vector> pts) {
-
-		double[][] path = new double[pts.size()][2];
-		for (int i = 0; i < pts.size(); i++) {
-			path[i][0] = pts.get(i).x;
-			path[i][1] = pts.get(i).y;
-		}
-
-		return path;
-
-	}
-
-	private ArrayList<Vector> makeList(double[][] pts) {
-
-		ArrayList<Vector> path = new ArrayList<>();
-		for (int i = 0; i < pts.length; i++) {
-			path.add(new Vector(pts[i][0], pts[i][1]));
-		}
-
-		return path;
-	}
-
-	//makes a copy of a double array
-
-	private double[][] doubleArrayCopy(double[][] array) {
-		double[][] newArray = new double[array.length][];
-		for (int i = 0; i < array.length; i++)
-			newArray[i] = Arrays.copyOf(array[i], array[i].length);
-		return newArray;
-	}
-
 	//methods to populate the path with more points, then to smooth the points in the path
 
 	private void injectPoints(Vector startPt, Vector endPt, ArrayList<Vector> temp) {
 		Vector vector = new Vector(Vector.sub(endPt, startPt, null));
-		double num_pts_that_fit = Math.ceil(vector.norm() / spacing);
+        double pointsCount = Math.ceil(vector.norm() / spacing);
 		Vector unitVector = vector.normalize(null);
-		unitVector.mult(vector.norm() / num_pts_that_fit);
-		for (int i = 0; i < num_pts_that_fit; i++) {
+        unitVector.mult(vector.norm() / pointsCount);
+        for (int i = 0; i < pointsCount; i++) {
 			Vector newVector = Vector.mult(unitVector, i, null);
 			temp.add(Vector.add(startPt, newVector, null));
 		}
@@ -102,12 +64,13 @@ public class Path {
 			for (int i = 1; i < robotPath.size() - 1; ++i) {
 				Vector oldVec = robotPath.get(i);
 				Vector currVec = newPath.get(i);
+                Vector currVecCopy = new Vector(currVec);
 				Vector prevVec = newPath.get(i - 1);
 				Vector nextVec = newPath.get(i + 1);
 				currVec.x += a * (oldVec.x - currVec.x) + b * (prevVec.x + nextVec.x - 2 * currVec.x);
 				currVec.y += a * (oldVec.y - currVec.y) + b * (prevVec.y + nextVec.y - 2 * currVec.y);
-				change += currVec.x - oldVec.x;
-				change += currVec.y - currVec.y;
+                change += Math.abs(currVecCopy.x - currVec.x);
+                change += Math.abs(currVecCopy.y - currVec.y);
 			}
 		}
 		ArrayList<Vector> path = new ArrayList<>();
@@ -115,6 +78,11 @@ public class Path {
 			path.add(new Vector(v));
 		robotPath = path;
 	}
+
+    public void addLastPoint() {
+        robotPath.add(endVector);
+    }
+
     /*
     private ArrayList<Vector> smooth(ArrayList<Vector> vectorPath, double a, double b, double tolerance) {
 

@@ -15,7 +15,7 @@ public class PoseEstimator implements Loop {
 	private static PoseEstimator instance;
 
 	private PoseEstimator() {
-		init(0);
+		reset();
 	}
 
 	public static PoseEstimator getInstance() {
