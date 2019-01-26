@@ -14,13 +14,16 @@ public class PoseEstimator implements Loop {
 
 	private static PoseEstimator instance;
 
-	private PoseEstimator(DriveTrainBase driveTrainBase) {
-		this.driveTrainBase = driveTrainBase;
+	private PoseEstimator() {
 		init(0);
 	}
 
-	public static PoseEstimator getInstance(DriveTrainBase driveTrainBase) {
-		return instance == null ? instance = new PoseEstimator(driveTrainBase) : instance;
+	public static PoseEstimator getInstance() {
+		return instance == null ? instance = new PoseEstimator() : instance;
+	}
+
+	public void setDriveTrainBase(DriveTrainBase driveTrainBase) {
+		this.driveTrainBase = driveTrainBase;
 	}
 
 	public Vector getPose() {
@@ -31,17 +34,20 @@ public class PoseEstimator implements Loop {
 		return velocity;
 	}
 
-	public void reset(RigidTransform startingPose) {
+	/**
+	 * MUST BE CALLED IMMEDIATELY AFTER RESETTING DRIVETRAIN/GYRO!
+	 */
+	public void reset() {
 		velocity = new Twist();
-		pose = startingPose;
+		pose = new RigidTransform();
 		prevPose = new RigidTransform();
+		prevLeftDist = 0;
+		prevRightDist = 0;
 	}
 
 	@Override
 	public void init(double timestamp) {
-		prevLeftDist = driveTrainBase.getLeftDistance();
-		prevRightDist = driveTrainBase.getRightDistance();
-		reset(new RigidTransform());
+		reset();
 	}
 
 	@Override
