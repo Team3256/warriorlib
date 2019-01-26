@@ -16,7 +16,7 @@ public class PoseEstimator implements Loop {
 
 	private PoseEstimator(DriveTrainBase driveTrainBase) {
 		this.driveTrainBase = driveTrainBase;
-		reset(new RigidTransform());
+		init(0);
 	}
 
 	public static PoseEstimator getInstance(DriveTrainBase driveTrainBase) {
