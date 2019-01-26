@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PathGenerator {
-    private double spacing, lookaheadDistance;
+    private double spacing;
     private double a = 0, b = 0, tolerance = 0;
     private ArrayList<Vector> points = new ArrayList<>();
     private double maxVel, maxAccel, maxVelk;
 
-    public PathGenerator(double spacing, double lookaheadDistance) {
+    public PathGenerator(double spacing) {
         this.spacing = spacing;
-        this.lookaheadDistance = lookaheadDistance;
     }
 
     public void setSmoothingParameters(double a, double b, double tolerance) {
