@@ -15,7 +15,7 @@ public class PurePursuitAction implements Action {
 
     @Override
     public boolean isFinished() {
-        return purePursuitTracker.isOnLastSegment();
+        return purePursuitTracker.isDone();
     }
 
     @Override
