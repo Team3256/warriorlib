@@ -12,7 +12,6 @@ public class PurePursuitTracker {
     private Path p;
     private double lookaheadDistance;
     private boolean onLastSegment;
-    private double maxVel, maxAccel, maxVelk;
     private double robotTrack;
 
     private PurePursuitTracker() {
@@ -23,16 +22,9 @@ public class PurePursuitTracker {
         return instance == null ? instance = new PurePursuitTracker() : instance;
     }
 
-    public void setVelocities(double maxVel, double maxAccel, double maxVelk) {
-        this.maxVel = maxVel;
-        this.maxAccel = maxAccel;
-        this.maxVelk = maxVelk;
-    }
-
     public void setPath(Path p, double lookaheadDistance) {
         this.p = p;
         this.lookaheadDistance = lookaheadDistance;
-        this.p.setTargetVelocities(maxVel, maxAccel, maxVelk);
     }
 
     public void setRobotTrack(double robotTrack) {

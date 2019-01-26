@@ -9,6 +9,7 @@ public class PathGenerator {
     private double spacing, lookaheadDistance;
     private double a = 0, b = 0, tolerance = 0;
     private ArrayList<Vector> points = new ArrayList<>();
+    private double maxVel, maxAccel, maxVelk;
 
     public PathGenerator(double spacing, double lookaheadDistance) {
         this.spacing = spacing;
@@ -19,6 +20,12 @@ public class PathGenerator {
         this.a = a;
         this.b = b;
         this.tolerance = tolerance;
+    }
+
+    public void setVelocities(double maxVel, double maxAccel, double maxVelk) {
+        this.maxVel = maxVel;
+        this.maxAccel = maxAccel;
+        this.maxVelk = maxVelk;
     }
 
     public void addPoint(Vector point) {
@@ -36,6 +43,7 @@ public class PathGenerator {
         path.addLastPoint();
         if (tolerance != 0)
             path.smooth(a, b, tolerance);
+        path.initializePath(maxVel, maxAccel, maxVelk);
         return path;
     }
 }
