@@ -190,7 +190,7 @@ public class Path {
 		robotPath.get(robotPath.size() - 1).setVelocity(0);
 		for (int i = robotPath.size() - 2; i >= 0; i--) {
 			double distance = Vector.dist(robotPath.get(i + 1), robotPath.get(i));
-			System.out.println(robotPath.get(i));
+			//System.out.println(robotPath.get(i));
 			double maxReachableVel = Math.sqrt(Math.pow(robotPath.get(i + 1).getVelocity(), 2) + (2 * maxAccel * distance));
 			robotPath.get(i).setVelocity(Math.min(calculateMaxVelocity(robotPath, i, maxVel, k), maxReachableVel));
 		}
