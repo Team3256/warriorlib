@@ -1,65 +1,68 @@
 package frc.team3256.warriorlib.auto;
 
+import frc.team3256.warriorlib.auto.action.Action;
+
 /**
  * Base class for autonomous modes
  */
 public abstract class AutoModeBase {
-    protected double updateRate = 1.0 / 50.0;
-    protected boolean active;
+	protected double updateRate = 1.0 / 50.0;
+	protected boolean active;
 
-    /**
-     * To be overriden; contains actual code to be executed when action is run
-     * @throws AutoModeEndedException
-     */
-    protected abstract void routine() throws AutoModeEndedException;
+	/**
+	 * To be overriden; contains actual code to be executed when action is run
+	 *
+	 * @throws AutoModeEndedException
+	 */
+	protected abstract void routine() throws AutoModeEndedException;
 
-    /**
-     * To not be overriden; runs the code in {@link #routine()}
-     */
-    public void run() {
-        active = true;
-        try {
-            routine();
-        } catch (AutoModeEndedException e) {
-            System.out.println("Auto mode ended early");
-        }
-        done();
-        System.out.println("Auto mode done");
-    }
+	/**
+	 * To not be overriden; runs the code in {@link #routine()}
+	 */
+	public void run() {
+		active = true;
+		try {
+			routine();
+		} catch (AutoModeEndedException e) {
+			System.out.println("Auto mode ended early");
+		}
+		done();
+		System.out.println("Auto mode done");
+	}
 
-    public void done() {
+	public void done() {
 
-    }
+	}
 
-    public void stop() {
-        active = false;
-    }
+	public void stop() {
+		active = false;
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	public boolean isActive() {
+		return active;
+	}
 
-    public boolean isActiveWithThrow() throws AutoModeEndedException {
-        if (!isActive())
-            throw new AutoModeEndedException();
-        return isActive();
-    }
+	public boolean isActiveWithThrow() throws AutoModeEndedException {
+		if (!isActive())
+			throw new AutoModeEndedException();
+		return isActive();
+	}
 
-    public void runAction(Action action) throws AutoModeEndedException {
-        isActiveWithThrow();
-        action.start();
+	public void runAction(Action action) throws AutoModeEndedException {
+		isActiveWithThrow();
+		action.start();
 
-        while (isActiveWithThrow() && !action.isFinished()) {
-            action.update();
-            long waitTime = (long) (updateRate * 1000L);
+		while (isActiveWithThrow() && !action.isFinished()) {
+			action.update();
+			long waitTime = (long) (updateRate * 1000L);
 
-            try {
-                Thread.sleep(waitTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+			try {
+				Thread.sleep(waitTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
-        action.done();
-    }
+		action.done();
+	}
 }
