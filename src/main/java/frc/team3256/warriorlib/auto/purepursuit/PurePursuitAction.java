@@ -20,7 +20,7 @@ public class PurePursuitAction implements Action {
 
     @Override
     public void update() {
-        DrivePower drivePower = purePursuitTracker.update(poseEstimator.getPose(), driveTrainBase.getVelocity(), Math.toRadians(driveTrainBase.getAngle()) + (Math.PI / 2));
+        DrivePower drivePower = purePursuitTracker.update(poseEstimator.getPose(), driveTrainBase.getVelocity(), driveTrainBase.getRotationAngle().radians());
         driveTrainBase.setVelocityClosedLoop(drivePower.getLeft(), drivePower.getRight());
     }
 
