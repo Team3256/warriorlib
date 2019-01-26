@@ -12,9 +12,15 @@ public class PoseEstimator implements Loop {
 	private double prevRightDist = 0;
 	private DriveTrainBase driveTrainBase;
 
-	public PoseEstimator(DriveTrainBase driveTrainBase) {
+	private static PoseEstimator instance;
+
+	private PoseEstimator(DriveTrainBase driveTrainBase) {
 		this.driveTrainBase = driveTrainBase;
 		reset(new RigidTransform());
+	}
+
+	public static PoseEstimator getInstance(DriveTrainBase driveTrainBase) {
+		return instance == null ? instance = new PoseEstimator(driveTrainBase) : instance;
 	}
 
 	public Vector getPose() {
