@@ -1,7 +1,7 @@
 package frc.team3256.warriorlib.control;
 
 public class TeleopDriveController {
-	private static final double logitechDeadband = 0.05;
+	private static final double controllerDeadband = 0.05;
 	private static final double kQuickStopThreshold = 0.2;
 	private static final double kQuickStopAlpha = 0.1;
 	private static final double kQuickStopScalar = 2.0;
@@ -11,17 +11,17 @@ public class TeleopDriveController {
 
 	//Tank Drive
 	public static DrivePower tankDrive(double leftPower, double rightPower) {
-		leftPower = handleDeadband(leftPower, logitechDeadband);
-		rightPower = handleDeadband(rightPower, logitechDeadband);
+		leftPower = handleDeadband(leftPower, controllerDeadband);
+		rightPower = handleDeadband(rightPower, controllerDeadband);
 		return new DrivePower(leftPower, rightPower);
 	}
 
 	//Arcade Drive
 	public static DrivePower arcadeDrive(double throttle, double turn) {
-		if (Math.abs(throttle) <= logitechDeadband) {
+		if (Math.abs(throttle) <= controllerDeadband) {
 			throttle = 0;
 		}
-		if (Math.abs(turn) <= logitechDeadband) {
+		if (Math.abs(turn) <= controllerDeadband) {
 			turn = 0;
 		}
 		double left = throttle + turn;
@@ -35,7 +35,7 @@ public class TeleopDriveController {
 
 	//Curvature or Cheesy Drive
 	public static DrivePower curvatureDrive(double throttle, double turn, boolean quickTurn, boolean highGear) {
-		turn = handleDeadband(turn, logitechDeadband);
+		turn = handleDeadband(turn, controllerDeadband);
 
 		double angularPower, overPower;
 
