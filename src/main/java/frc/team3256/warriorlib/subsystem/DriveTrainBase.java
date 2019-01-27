@@ -41,9 +41,14 @@ public abstract class DriveTrainBase extends SubsystemBase {
 	public abstract Rotation getRotationAngle();
 
 	/**
-	 * @return velocity of each side of the robot, averaged
+	 * @return velocity of left side of robot
 	 */
-	public abstract double getVelocity();
+	public abstract double getLeftVelocity();
+
+	/**
+	 * @return velocity of right side of robot
+	 */
+	public abstract double getRightVelocity();
 
 	/**
 	 * Sets left and right velocities of the robot

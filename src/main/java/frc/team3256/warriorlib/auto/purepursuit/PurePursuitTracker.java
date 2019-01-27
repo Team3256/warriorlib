@@ -14,7 +14,8 @@ public class PurePursuitTracker {
 	private int lastClosestPoint;
 	private Path path;
 	private double lookaheadDistance;
-	private double robotTrack;
+	private double robotTrack = 0;
+	private double feedbackMultiplier = 0;
 
 	private PurePursuitTracker() {
 		reset();
@@ -43,6 +44,15 @@ public class PurePursuitTracker {
 		this.robotTrack = robotTrack;
 	}
 
+	/**
+	 * Sets the feedback multiplier (proportional feedback constant) for velocities
+	 *
+	 * @param feedbackMultiplier feedback multiplier
+	 */
+	public void setFeedbackMultiplier(double feedbackMultiplier) {
+		this.feedbackMultiplier = feedbackMultiplier;
+	}
+
 	public void reset() {
 		this.lastClosestPoint = 0;
 	}
@@ -51,10 +61,12 @@ public class PurePursuitTracker {
 	 * Updates the tracker and returns left and right velocities
 	 *
 	 * @param currPose current position of robot
-	 * @param heading  current angle of robot
+	 * @param currLeftVel current left velocity of robot
+	 * @param currRightVel current right velocity of robot
+	 * @param heading current angle of robot
 	 * @return left and right velocities to be sent to drivetrain
 	 */
-	public DrivePower update(Vector currPose, double heading) {
+	public DrivePower update(Vector currPose, double currLeftVel, double currRightVel, double heading) {
 		boolean onLastSegment = false;
 		int closestPointIndex = getClosestPointIndex(currPose);
 		Vector lookaheadPoint = new Vector(0, 0);
@@ -73,6 +85,9 @@ public class PurePursuitTracker {
 		double curvature = path.calculateCurvatureLookAheadArc(currPose, heading, lookaheadPoint, lookaheadDistance);
 		double leftTargetVel = calculateLeftTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
 		double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
+
+		double leftFeedback = feedbackMultiplier * (leftTargetVel - currLeftVel);
+		double rightFeedback = feedbackMultiplier * (rightTargetVel - currRightVel);
         /*
         System.out.println("leftTargetVel: " + leftTargetVel);
         System.out.println("rightTargetVel: " + rightTargetVel);
@@ -83,7 +98,7 @@ public class PurePursuitTracker {
         double leftFB = calculateFeedback(leftTargetVel, currVel);
         */
 
-		return new DrivePower(leftTargetVel, rightTargetVel, true);
+		return new DrivePower(leftTargetVel + leftFeedback, rightTargetVel + rightFeedback, true);
 	}
 
     /*
