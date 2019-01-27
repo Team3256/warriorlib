@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -67,9 +68,7 @@ public class Looper {
 	 * @param loops Control loop to register
 	 */
 	public void addLoops(Loop... loops) {
-		for (Loop l : loops) {
-			this.loops.add(l);
-		}
+		this.loops.addAll(Arrays.asList(loops));
 	}
 
 	public void removeLoop(Loop loop) {

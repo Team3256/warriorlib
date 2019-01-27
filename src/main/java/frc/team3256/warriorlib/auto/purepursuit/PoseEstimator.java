@@ -10,7 +10,7 @@ public class PoseEstimator implements Loop {
 	private RigidTransform prevPose;
 	private double prevLeftDist = 0;
 	private double prevRightDist = 0;
-	private DriveTrainBase driveTrainBase;
+	private DriveTrainBase driveTrain = DriveTrainBase.getDriveTrain();
 
 	private static PoseEstimator instance;
 
@@ -20,10 +20,6 @@ public class PoseEstimator implements Loop {
 
 	public static PoseEstimator getInstance() {
 		return instance == null ? instance = new PoseEstimator() : instance;
-	}
-
-	public void setDriveTrainBase(DriveTrainBase driveTrainBase) {
-		this.driveTrainBase = driveTrainBase;
 	}
 
 	public Vector getPose() {
@@ -52,11 +48,11 @@ public class PoseEstimator implements Loop {
 
 	@Override
 	public void update(double timestamp) {
-		double leftDist = driveTrainBase.getLeftDistance();
-		double rightDist = driveTrainBase.getRightDistance();
+		double leftDist = driveTrain.getLeftDistance();
+		double rightDist = driveTrain.getRightDistance();
 		double deltaLeftDist = leftDist - prevLeftDist;
 		double deltaRightDist = rightDist - prevRightDist;
-		Rotation deltaHeading = prevPose.getRotation().inverse().rotate(driveTrainBase.getRotationAngle());
+		Rotation deltaHeading = prevPose.getRotation().inverse().rotate(driveTrain.getRotationAngle());
 		//Use encoders + gyro to determine our velocity
 		velocity = Kinematics.forwardKinematics(deltaLeftDist, deltaRightDist, deltaHeading.radians());
 		//use velocity to determine our pose

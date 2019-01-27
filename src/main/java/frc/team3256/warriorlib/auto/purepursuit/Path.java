@@ -4,8 +4,11 @@ import frc.team3256.warriorlib.math.Vector;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a path to be followed by the Pure Pursuit algorithm
+ */
 public class Path {
-    private double spacing; //spacing between points
+	private double spacing;
 	private ArrayList<Vector> robotPath = new ArrayList<>();
 	private Vector endVector = new Vector(0, 0);
 
@@ -25,14 +28,24 @@ public class Path {
 		return robotPath.get(robotPath.size() - 1);
 	}
 
+	/**
+	 * Initializes the path
+	 *
+	 * @param maxVel   maximum robot velocity
+	 * @param maxAccel maximum robot acceleration
+	 * @param maxVelk  maximum turning velocity (between 1-5)
+	 */
 	public void initializePath(double maxVel, double maxAccel, double maxVelk) {
 		setCurvatures();
 		setDistances();
 		setTargetVelocities(maxVel, maxAccel, maxVelk);
 	}
 
-	//adds a start and end point Vector to the robotPath ArrayList
-
+	/**
+	 * Adds a path segment to this path
+	 * @param start starting point
+	 * @param end ending point
+	 */
 	public void addSegment(Vector start, Vector end) {
 		ArrayList<Vector> injectTemp = new ArrayList<>();
 		injectPoints(start, end, injectTemp);
@@ -40,19 +53,29 @@ public class Path {
 		endVector = end;
 	}
 
-	//methods to populate the path with more points, then to smooth the points in the path
-
+	/**
+	 * Injects points into this path
+	 * @param startPt starting point
+	 * @param endPt ending point
+	 * @param temp temporary storage for injected points
+	 */
 	private void injectPoints(Vector startPt, Vector endPt, ArrayList<Vector> temp) {
 		Vector vector = new Vector(Vector.sub(endPt, startPt, null));
-        double pointsCount = Math.ceil(vector.norm() / spacing);
+		double pointsCount = Math.ceil(vector.norm() / spacing);
 		Vector unitVector = vector.normalize(null);
-        unitVector.mult(vector.norm() / pointsCount);
-        for (int i = 0; i < pointsCount; i++) {
+		unitVector.mult(vector.norm() / pointsCount);
+		for (int i = 0; i < pointsCount; i++) {
 			Vector newVector = Vector.mult(unitVector, i, null);
 			temp.add(Vector.add(startPt, newVector, null));
 		}
 	}
 
+	/**
+	 * Smooths the path using gradient descent
+	 * @param a 1-b
+	 * @param b smoothing factor (higher = more smooth)
+	 * @param tolerance convergence tolerance amount (higher = less smoothing)
+	 */
 	public void smooth(double a, double b, double tolerance) {
 		ArrayList<Vector> newPath = new ArrayList<>();
 		for (Vector v : robotPath) {
@@ -64,13 +87,13 @@ public class Path {
 			for (int i = 1; i < robotPath.size() - 1; ++i) {
 				Vector oldVec = robotPath.get(i);
 				Vector currVec = newPath.get(i);
-                Vector currVecCopy = new Vector(currVec);
+				Vector currVecCopy = new Vector(currVec);
 				Vector prevVec = newPath.get(i - 1);
 				Vector nextVec = newPath.get(i + 1);
 				currVec.x += a * (oldVec.x - currVec.x) + b * (prevVec.x + nextVec.x - 2 * currVec.x);
 				currVec.y += a * (oldVec.y - currVec.y) + b * (prevVec.y + nextVec.y - 2 * currVec.y);
-                change += Math.abs(currVecCopy.x - currVec.x);
-                change += Math.abs(currVecCopy.y - currVec.y);
+				change += Math.abs(currVecCopy.x - currVec.x);
+				change += Math.abs(currVecCopy.y - currVec.y);
 			}
 		}
 		ArrayList<Vector> path = new ArrayList<>();
@@ -79,9 +102,9 @@ public class Path {
 		robotPath = path;
 	}
 
-    public void addLastPoint() {
-        robotPath.add(endVector);
-    }
+	public void addLastPoint() {
+		robotPath.add(endVector);
+	}
 
     /*
     private ArrayList<Vector> smooth(ArrayList<Vector> vectorPath, double a, double b, double tolerance) {

@@ -6,12 +6,8 @@ import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
 public class PurePursuitAction implements Action {
     private PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
-    private static DriveTrainBase driveTrainBase;
+    private DriveTrainBase driveTrain = DriveTrainBase.getDriveTrain();
     private PoseEstimator poseEstimator = PoseEstimator.getInstance();
-
-    public static void setDriveTrainBase(DriveTrainBase driveTrainBase) {
-        PurePursuitAction.driveTrainBase = driveTrainBase;
-    }
 
     @Override
     public boolean isFinished() {
@@ -20,23 +16,23 @@ public class PurePursuitAction implements Action {
 
     @Override
     public void update() {
-        DrivePower drivePower = purePursuitTracker.update(poseEstimator.getPose(), driveTrainBase.getVelocity(), driveTrainBase.getRotationAngle().radians());
-        driveTrainBase.setVelocityClosedLoop(drivePower.getLeft(), drivePower.getRight());
+        DrivePower drivePower = purePursuitTracker.update(poseEstimator.getPose(), driveTrain.getRotationAngle().radians());
+        driveTrain.setVelocityClosedLoop(drivePower.getLeft(), drivePower.getRight());
     }
 
     @Override
     public void done() {
-        driveTrainBase.setVelocityClosedLoop(0, 0);
-        driveTrainBase.resetEncoders();
-        driveTrainBase.resetGyro();
+        driveTrain.setVelocityClosedLoop(0, 0);
+        driveTrain.resetEncoders();
+        driveTrain.resetGyro();
         poseEstimator.reset();
         purePursuitTracker.reset();
     }
 
     @Override
     public void start() {
-        driveTrainBase.resetEncoders();
-        driveTrainBase.resetGyro();
+        driveTrain.resetEncoders();
+        driveTrain.resetGyro();
         poseEstimator.reset();
         purePursuitTracker.reset();
     }
