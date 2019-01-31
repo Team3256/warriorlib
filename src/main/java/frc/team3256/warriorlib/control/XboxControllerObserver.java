@@ -73,6 +73,7 @@ public class XboxControllerObserver implements ControllerObserver {
             xboxListenerBase.onStartPressed();
         }
         if (xboxController.getStartButtonReleased()) {
+            setRumble();
             xboxListenerBase.onStartReleased();
         }
         // Left Shoulder
