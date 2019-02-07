@@ -106,29 +106,6 @@ public class Path {
 		robotPath.add(endVector);
 	}
 
-    /*
-    private ArrayList<Vector> smooth(ArrayList<Vector> vectorPath, double a, double b, double tolerance) {
-
-        double [][] path = makeArray(vectorPath);
-
-        double [][] newPath = doubleArrayCopy(path);
-        double change = tolerance;
-
-        while (change >= 0) {
-            change = 0;
-            for (int i = 1; i < path.length - 1; i++) {
-                for (int j = 1; j < path[i].length; j++) {
-                    double aux = newPath[i][j];
-                    newPath[i][j] += a * (path[i][j] - newPath[i][j]) + b * (newPath[i-1][j] + newPath[i+1][j] - (2.0 * newPath[i][j]));
-                    change += Math.abs(aux - newPath[i][j]);
-                }
-            }
-        }
-        return makeList(newPath);
-
-    }
-    */
-
 	//calculations for point attributes (curvature and max velocity)
 
 	private double calculatePathCurvature(ArrayList<Vector> path, int pointIndex) {

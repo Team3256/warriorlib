@@ -32,6 +32,7 @@ public class PurePursuitTracker {
 	 * @param lookaheadDistance lookahead distance (ideally between 15-24 inches)
 	 */
 	public void setPath(Path path, double lookaheadDistance) {
+		reset();
 		this.path = path;
 		this.lookaheadDistance = lookaheadDistance;
 	}

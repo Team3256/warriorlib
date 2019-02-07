@@ -23,17 +23,17 @@ public class PurePursuitAction implements Action {
     @Override
     public void done() {
         driveTrain.setVelocityClosedLoop(0, 0);
-        driveTrain.resetEncoders();
-        driveTrain.resetGyro();
-        poseEstimator.reset();
+        //driveTrain.resetEncoders();
+        //driveTrain.resetGyro();
+        //poseEstimator.reset();
         purePursuitTracker.reset();
     }
 
     @Override
     public void start() {
-        driveTrain.resetEncoders();
-        driveTrain.resetGyro();
-        poseEstimator.reset();
+        //driveTrain.resetEncoders();
+        //driveTrain.resetGyro();
+        //poseEstimator.reset();
         purePursuitTracker.reset();
     }
 }
