@@ -10,9 +10,11 @@ public class PathGenerator {
     private double a = 0, b = 0, tolerance = 0;
     private ArrayList<Vector> points = new ArrayList<>();
     private double maxVel, maxAccel, maxVelk;
+    private boolean forward;
 
-    public PathGenerator(double spacing) {
+    public PathGenerator(double spacing, boolean forward) {
         this.spacing = spacing;
+        this.forward = forward;
     }
 
     public void setSmoothingParameters(double a, double b, double tolerance) {
@@ -36,7 +38,7 @@ public class PathGenerator {
     }
 
     public Path generatePath() {
-        Path path = new Path(spacing);
+        Path path = new Path(spacing, forward);
         for (int i = 0; i < points.size() - 1; ++i)
             path.addSegment(points.get(i), points.get(i + 1));
         path.addLastPoint();
