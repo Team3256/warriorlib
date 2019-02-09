@@ -20,8 +20,8 @@ public class XboxControllerObserver implements ControllerObserver {
     }
 
     public void setListener(XboxListenerBase listener) {
-        xboxListenerBase.setController(this);
         xboxListenerBase = listener;
+        xboxListenerBase.setController(this);
     }
 
     public void setRumble(double strength) {
