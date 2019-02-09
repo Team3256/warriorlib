@@ -1,6 +1,18 @@
 package frc.team3256.warriorlib.control;
 
+import edu.wpi.first.wpilibj.XboxController;
+
 public abstract class XboxListenerBase {
+    private XboxControllerObserver xboxControllerObserver;
+
+    public void setController(XboxControllerObserver xboxControllerObserver) {
+        this.xboxControllerObserver = xboxControllerObserver;
+    }
+
+    public XboxControllerObserver getController() {
+        return xboxControllerObserver;
+    }
+
     public abstract void onAPressed();
     public abstract void onBPressed();
     public abstract void onXPressed();

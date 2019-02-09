@@ -20,12 +20,17 @@ public class XboxControllerObserver implements ControllerObserver {
     }
 
     public void setListener(XboxListenerBase listener) {
+        xboxListenerBase.setController(this);
         xboxListenerBase = listener;
     }
 
-    public void setRumble() {
-        xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
-        xboxController.setRumble(GenericHID.RumbleType.kRightRumble, 1);
+    public void setRumble(double strength) {
+        xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, strength);
+        xboxController.setRumble(GenericHID.RumbleType.kRightRumble, strength);
+    }
+
+    public XboxController getXboxController() {
+        return xboxController;
     }
 
     public void update() {
@@ -73,7 +78,6 @@ public class XboxControllerObserver implements ControllerObserver {
             xboxListenerBase.onStartPressed();
         }
         if (xboxController.getStartButtonReleased()) {
-            setRumble();
             xboxListenerBase.onStartReleased();
         }
         // Left Shoulder
