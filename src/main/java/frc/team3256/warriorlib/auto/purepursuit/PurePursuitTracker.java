@@ -12,6 +12,7 @@ import java.util.Optional;
 public class PurePursuitTracker {
 	private static PurePursuitTracker instance;
 	private int lastClosestPoint;
+	private ArrayList<Path> paths = new ArrayList<>();
 	private Path path;
 	private double lookaheadDistance;
 	private double robotTrack = 0;
@@ -28,12 +29,11 @@ public class PurePursuitTracker {
 	/**
 	 * Sets the path to be tracked
 	 *
-	 * @param path              path to be tracked
 	 * @param lookaheadDistance lookahead distance (ideally between 15-24 inches)
 	 */
-	public void setPath(Path path, double lookaheadDistance) {
+	public void setPath(ArrayList<Path> paths, double lookaheadDistance) {
 		reset();
-		this.path = path;
+		this.paths = paths;
 		this.lookaheadDistance = lookaheadDistance;
 	}
 
@@ -252,5 +252,13 @@ public class PurePursuitTracker {
 	 */
 	public boolean isDone() {
 		return getClosestPointIndex(PoseEstimator.getInstance().getPose()) == path.getRobotPath().size() - 1;
+	}
+
+	public void choosePath(Integer pathIndex) {
+		this.path = paths.get(pathIndex);
+	}
+
+	public Path getPath() {
+		return path;
 	}
 }

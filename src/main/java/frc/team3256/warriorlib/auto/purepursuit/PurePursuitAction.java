@@ -8,6 +8,7 @@ public class PurePursuitAction implements Action {
     private PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
     private DriveTrainBase driveTrain = DriveTrainBase.getDriveTrain();
     private PoseEstimator poseEstimator = PoseEstimator.getInstance();
+    private Integer pathIndex = 0;
 
     @Override
     public boolean isFinished() {
@@ -35,5 +36,16 @@ public class PurePursuitAction implements Action {
         //driveTrain.resetGyro();
         //poseEstimator.reset();
         purePursuitTracker.reset();
+        purePursuitTracker.choosePath(pathIndex);
+        if (purePursuitTracker.getPath().isForward()) {
+            driveTrain.unflipDirection();
+        }
+        else {
+            driveTrain.flipDirection();
+        }
+    }
+
+    public void setPathIndex(Integer pathIndex) {
+        this.pathIndex = pathIndex;
     }
 }

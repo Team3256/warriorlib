@@ -11,9 +11,11 @@ public class Path {
 	private double spacing;
 	private ArrayList<Vector> robotPath = new ArrayList<>();
 	private Vector endVector = new Vector(0, 0);
+	private boolean forward;
 
-	public Path(double spacing) {
+	public Path(double spacing, boolean forward) {
 		this.spacing = spacing;
+		this.forward = forward;
 	}
 
 	public ArrayList<Vector> getRobotPath() {
@@ -26,6 +28,10 @@ public class Path {
 
 	public Vector getEndPoint() {
 		return robotPath.get(robotPath.size() - 1);
+	}
+
+	public boolean isForward() {
+		return forward;
 	}
 
 	/**
