@@ -58,16 +58,6 @@ public abstract class DriveTrainBase extends SubsystemBase {
 	public abstract void setVelocityClosedLoop(double left, double right);
 
 	/**
-	 * flips drivetrain direction
-	 */
-	public abstract void flipDirection();
-
-	/**
-	 * unflips drivetrain direction
-	 */
-	public abstract void unflipDirection();
-
-	/**
 	 * Resets encoders to zero
 	 */
 	public abstract void resetEncoders();

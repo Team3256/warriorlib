@@ -8,7 +8,11 @@ public class PurePursuitAction implements Action {
     private PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
     private DriveTrainBase driveTrain = DriveTrainBase.getDriveTrain();
     private PoseEstimator poseEstimator = PoseEstimator.getInstance();
-    private Integer pathIndex = 0;
+    private int pathIndex;
+
+    public PurePursuitAction(int pathIndex) {
+        this.pathIndex = pathIndex;
+    }
 
     @Override
     public boolean isFinished() {
@@ -24,25 +28,13 @@ public class PurePursuitAction implements Action {
     @Override
     public void done() {
         driveTrain.setVelocityClosedLoop(0, 0);
-        //driveTrain.resetEncoders();
-        //driveTrain.resetGyro();
-        //poseEstimator.reset();
         purePursuitTracker.reset();
     }
 
     @Override
     public void start() {
-        //driveTrain.resetEncoders();
-        //driveTrain.resetGyro();
-        //poseEstimator.reset();
         purePursuitTracker.reset();
-        purePursuitTracker.choosePath(pathIndex);
-        if (purePursuitTracker.getPath().isForward()) {
-            driveTrain.unflipDirection();
-        }
-        else {
-            driveTrain.flipDirection();
-        }
+        purePursuitTracker.setPath(pathIndex);
     }
 
     public void setPathIndex(Integer pathIndex) {
