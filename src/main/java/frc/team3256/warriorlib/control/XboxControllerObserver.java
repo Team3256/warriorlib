@@ -21,16 +21,6 @@ public class XboxControllerObserver implements ControllerObserver {
 
     public void setListener(XboxListenerBase listener) {
         xboxListenerBase = listener;
-        xboxListenerBase.setController(this);
-    }
-
-    public void setRumble(double strength) {
-        xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, strength);
-        xboxController.setRumble(GenericHID.RumbleType.kRightRumble, strength);
-    }
-
-    public XboxController getXboxController() {
-        return xboxController;
     }
 
     public void update() {
@@ -101,7 +91,7 @@ public class XboxControllerObserver implements ControllerObserver {
         if (xboxController.getStickButtonReleased(GenericHID.Hand.kLeft)) {
             xboxListenerBase.onLeftJoystickReleased();
         }
-        xboxListenerBase.onLeftJoystick(xboxController.getX(GenericHID.Hand.kLeft), xboxController.getY(GenericHID.Hand.kLeft));
+        xboxListenerBase.onLeftJoystick(xboxController.getX(GenericHID.Hand.kLeft), -xboxController.getY(GenericHID.Hand.kLeft));
         // Right Joystick
         if (xboxController.getStickButtonPressed(GenericHID.Hand.kRight)) {
             xboxListenerBase.onRightJoystickPressed();
@@ -109,7 +99,7 @@ public class XboxControllerObserver implements ControllerObserver {
         if (xboxController.getStickButtonReleased(GenericHID.Hand.kRight)) {
             xboxListenerBase.onRightJoystickReleased();
         }
-        xboxListenerBase.onRightJoyStick(xboxController.getX(GenericHID.Hand.kRight), xboxController.getY(GenericHID.Hand.kRight));
+        xboxListenerBase.onRightJoyStick(xboxController.getX(GenericHID.Hand.kRight), -xboxController.getY(GenericHID.Hand.kRight));
         // Left Trigger
         xboxListenerBase.onLeftTrigger(xboxController.getTriggerAxis(GenericHID.Hand.kLeft));
         // Right Trigger
