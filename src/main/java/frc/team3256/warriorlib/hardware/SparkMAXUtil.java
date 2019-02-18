@@ -121,16 +121,4 @@ public class SparkMAXUtil {
 			sparkMax.setIdleMode(CANSparkMax.IdleMode.kCoast);
 		}
 	}
-
-	/**
-	 * Sets the amount of secodns it takes to go from 0 power to full throttle
-	 *
-	 * @param seconds Amount of time in seconds SparkMAX takes to ramp to full throttle
-	 * @param sparks  SparkMAX objects
-	 */
-	public static void setRampRate(double seconds, CANSparkMax... sparks) {
-		for (CANSparkMax sparkMax : sparks) {
-			sparkMax.setRampRate(seconds);
-		}
-	}
 }
