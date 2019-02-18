@@ -28,6 +28,19 @@ public class XboxControllerObserver implements ControllerObserver {
         xboxController.setRumble(GenericHID.RumbleType.kRightRumble, strength);
     }
 
+    public void setRumbleForDuration(double strength, int ms) {
+        this.setRumble(strength);
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(ms);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.setRumble(0);
+        });
+        thread.start();
+    }
+
     public void update() {
         if (xboxController == null) {
             System.out.println("No controller listener set, add one using .setListener()");
