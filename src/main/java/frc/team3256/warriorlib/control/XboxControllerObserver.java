@@ -92,14 +92,14 @@ public class XboxControllerObserver implements ControllerObserver {
         if (xboxController.getBumperPressed(GenericHID.Hand.kLeft)) {
             xboxListenerBase.onLeftShoulderPressed();
         }
-        if (xboxController.getBumperPressed(GenericHID.Hand.kLeft)) {
+        if (xboxController.getBumperReleased(GenericHID.Hand.kLeft)) {
             xboxListenerBase.onLeftShoulderReleased();
         }
         // Right Shoulder
         if (xboxController.getBumperPressed(GenericHID.Hand.kRight)) {
             xboxListenerBase.onRightShoulderPressed();
         }
-        if (xboxController.getBumperPressed(GenericHID.Hand.kRight)) {
+        if (xboxController.getBumperReleased(GenericHID.Hand.kRight)) {
             xboxListenerBase.onRightShoulderReleased();
         }
         // Left Joystick
