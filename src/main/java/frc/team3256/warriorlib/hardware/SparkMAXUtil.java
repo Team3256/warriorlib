@@ -60,6 +60,13 @@ public class SparkMAXUtil {
 		sparkPIDController.setIZone(kIz, slot);
 	}
 
+    public static void setSmartMotionParams(CANPIDController sparkPIDController, double minVel, double maxVel, double maxAccel, double allowedErr, int slot) {
+        sparkPIDController.setSmartMotionAllowedClosedLoopError(allowedErr, slot);
+        sparkPIDController.setSmartMotionMinOutputVelocity(minVel, slot);
+        sparkPIDController.setSmartMotionMaxVelocity(maxVel, slot);
+        sparkPIDController.setSmartMotionMaxAccel(maxAccel, slot);
+    }
+
 	/**
 	 * Limits the current draw
 	 *
