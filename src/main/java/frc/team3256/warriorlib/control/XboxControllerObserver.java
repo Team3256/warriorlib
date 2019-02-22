@@ -9,6 +9,12 @@ public class XboxControllerObserver implements ControllerObserver {
 
     private int previousPOV;
 
+    private double previousLeftX = 0.0;
+    private double previousLeftY = 0.0;
+
+    private double previousRightX = 0.0;
+    private double previousRightY = 0.0;
+
     public XboxControllerObserver(int port) {
         this.xboxController = new edu.wpi.first.wpilibj.XboxController(port);
     }
@@ -109,7 +115,16 @@ public class XboxControllerObserver implements ControllerObserver {
         if (xboxController.getStickButtonReleased(GenericHID.Hand.kLeft)) {
             xboxListenerBase.onLeftJoystickReleased();
         }
-        xboxListenerBase.onLeftJoystick(xboxController.getX(GenericHID.Hand.kLeft), -xboxController.getY(GenericHID.Hand.kLeft));
+
+        double leftX = xboxController.getX(GenericHID.Hand.kLeft) > 0.25 ? xboxController.getX(GenericHID.Hand.kLeft) : 0.0;
+        double leftY = xboxController.getY(GenericHID.Hand.kLeft) > 0.25 ? xboxController.getY(GenericHID.Hand.kLeft) : 0.0;
+
+        if (leftX != previousLeftX ||
+            leftY != previousLeftY) {
+                xboxListenerBase.onRightJoyStick(leftX, -leftY);
+                previousLeftX = leftX;
+                previousLeftY = leftY;
+        }
         // Right Joystick
         if (xboxController.getStickButtonPressed(GenericHID.Hand.kRight)) {
             xboxListenerBase.onRightJoystickPressed();
@@ -117,7 +132,17 @@ public class XboxControllerObserver implements ControllerObserver {
         if (xboxController.getStickButtonReleased(GenericHID.Hand.kRight)) {
             xboxListenerBase.onRightJoystickReleased();
         }
-        xboxListenerBase.onRightJoyStick(xboxController.getX(GenericHID.Hand.kRight), -xboxController.getY(GenericHID.Hand.kRight));
+
+        double rightX = xboxController.getX(GenericHID.Hand.kRight) > 0.25 ? xboxController.getX(GenericHID.Hand.kRight) : 0.0;;
+        double rightY = xboxController.getY(GenericHID.Hand.kRight) > 0.25 ? xboxController.getY(GenericHID.Hand.kRight) : 0.0;
+
+        if (rightX != previousRightX ||
+            rightY != previousRightY) {
+                xboxListenerBase.onRightJoyStick(rightX, -rightY);
+                previousRightX = rightX;
+                previousRightY = rightY;
+        }
+        
         // Left Trigger
         xboxListenerBase.onLeftTrigger(xboxController.getTriggerAxis(GenericHID.Hand.kLeft));
         // Right Trigger
