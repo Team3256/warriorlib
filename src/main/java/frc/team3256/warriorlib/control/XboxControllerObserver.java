@@ -124,7 +124,7 @@ public class XboxControllerObserver implements ControllerObserver {
 
         if (leftX != previousLeftX ||
             leftY != previousLeftY) {
-                xboxListenerBase.onRightJoystick(leftX, -leftY);
+                xboxListenerBase.onLeftJoystick(leftX, -leftY);
                 previousLeftX = leftX;
                 previousLeftY = leftY;
         }
