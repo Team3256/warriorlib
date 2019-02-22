@@ -15,6 +15,9 @@ public class XboxControllerObserver implements ControllerObserver {
     private double previousRightX = 0.0;
     private double previousRightY = 0.0;
 
+    private double previousTriggerLeft = 0.0;
+    private double previousTriggerRight = 0.0;
+
     public XboxControllerObserver(int port) {
         this.xboxController = new edu.wpi.first.wpilibj.XboxController(port);
     }
@@ -121,7 +124,7 @@ public class XboxControllerObserver implements ControllerObserver {
 
         if (leftX != previousLeftX ||
             leftY != previousLeftY) {
-                xboxListenerBase.onRightJoyStick(leftX, -leftY);
+                xboxListenerBase.onRightJoystick(leftX, -leftY);
                 previousLeftX = leftX;
                 previousLeftY = leftY;
         }
@@ -138,15 +141,24 @@ public class XboxControllerObserver implements ControllerObserver {
 
         if (rightX != previousRightX ||
             rightY != previousRightY) {
-                xboxListenerBase.onRightJoyStick(rightX, -rightY);
+                xboxListenerBase.onRightJoystick(rightX, -rightY);
                 previousRightX = rightX;
                 previousRightY = rightY;
         }
-        
-        // Left Trigger
-        xboxListenerBase.onLeftTrigger(xboxController.getTriggerAxis(GenericHID.Hand.kLeft));
-        // Right Trigger
-        xboxListenerBase.onRightTrigger(xboxController.getTriggerAxis(GenericHID.Hand.kRight));
+
+        double leftTrigger = xboxController.getTriggerAxis(GenericHID.Hand.kLeft) > 0.25 ? xboxController.getTriggerAxis(GenericHID.Hand.kLeft) : 0.0;;
+
+        if (leftTrigger != previousTriggerLeft) {
+                xboxListenerBase.onLeftTrigger(leftTrigger);
+                previousTriggerLeft = leftTrigger;
+        }
+
+        double rightTrigger = xboxController.getTriggerAxis(GenericHID.Hand.kRight) > 0.25 ? xboxController.getTriggerAxis(GenericHID.Hand.kRight) : 0.0;;
+
+        if (rightTrigger != previousTriggerRight) {
+                xboxListenerBase.onRightTrigger(rightTrigger);
+                previousTriggerRight = rightTrigger;
+        }
 
         int pov = xboxController.getPOV();
         // Call released function if no button on the dpad is pressed

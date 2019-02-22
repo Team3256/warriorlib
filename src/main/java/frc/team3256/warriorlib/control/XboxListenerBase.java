@@ -49,7 +49,7 @@ public abstract class XboxListenerBase {
     public abstract void onRightTrigger(double value);
 
     public abstract void onLeftJoystick(double x, double y);
-    public abstract void onRightJoyStick(double x, double y);
+    public abstract void onRightJoystick(double x, double y);
 
     public abstract void onLeftJoystickPressed();
     public abstract void onRightJoystickPressed();
