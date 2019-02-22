@@ -119,8 +119,8 @@ public class XboxControllerObserver implements ControllerObserver {
             xboxListenerBase.onLeftJoystickReleased();
         }
 
-        double leftX = xboxController.getX(GenericHID.Hand.kLeft) > 0.25 ? xboxController.getX(GenericHID.Hand.kLeft) : 0.0;
-        double leftY = xboxController.getY(GenericHID.Hand.kLeft) > 0.25 ? xboxController.getY(GenericHID.Hand.kLeft) : 0.0;
+        double leftX = Math.abs(xboxController.getX(GenericHID.Hand.kLeft)) > 0.25 ? xboxController.getX(GenericHID.Hand.kLeft) : 0.0;
+        double leftY = Math.abs(xboxController.getY(GenericHID.Hand.kLeft)) > 0.25 ? xboxController.getY(GenericHID.Hand.kLeft) : 0.0;
 
         if (leftX != previousLeftX ||
             leftY != previousLeftY) {
@@ -136,8 +136,8 @@ public class XboxControllerObserver implements ControllerObserver {
             xboxListenerBase.onRightJoystickReleased();
         }
 
-        double rightX = xboxController.getX(GenericHID.Hand.kRight) > 0.25 ? xboxController.getX(GenericHID.Hand.kRight) : 0.0;;
-        double rightY = xboxController.getY(GenericHID.Hand.kRight) > 0.25 ? xboxController.getY(GenericHID.Hand.kRight) : 0.0;
+        double rightX = Math.abs(xboxController.getX(GenericHID.Hand.kRight)) > 0.25 ? xboxController.getX(GenericHID.Hand.kRight) : 0.0;
+        double rightY = Math.abs(xboxController.getY(GenericHID.Hand.kRight)) > 0.25 ? xboxController.getY(GenericHID.Hand.kRight) : 0.0;
 
         if (rightX != previousRightX ||
             rightY != previousRightY) {
@@ -146,7 +146,7 @@ public class XboxControllerObserver implements ControllerObserver {
                 previousRightY = rightY;
         }
 
-        double leftTrigger = xboxController.getTriggerAxis(GenericHID.Hand.kLeft) > 0.25 ? xboxController.getTriggerAxis(GenericHID.Hand.kLeft) : 0.0;;
+        double leftTrigger = xboxController.getTriggerAxis(GenericHID.Hand.kLeft) > 0.25 ? xboxController.getTriggerAxis(GenericHID.Hand.kLeft) : 0.0;
 
         if (leftTrigger != previousTriggerLeft) {
                 xboxListenerBase.onLeftTrigger(leftTrigger);
