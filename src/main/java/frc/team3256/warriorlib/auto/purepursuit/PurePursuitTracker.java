@@ -84,12 +84,14 @@ public class PurePursuitTracker {
 				break;
 			}
 		}
+
 		double curvature = path.calculateCurvatureLookAheadArc(currPose, heading, lookaheadPoint, lookaheadDistance);
 		double leftTargetVel = calculateLeftTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
 		double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
-        if (!path.isForward()) {
-            leftTargetVel = -leftTargetVel;
-            rightTargetVel = -rightTargetVel;
+
+		if (!path.isForward()) {
+            leftTargetVel = -rightTargetVel;
+            rightTargetVel = -leftTargetVel;
         }
 
 		double leftFeedback = feedbackMultiplier * (leftTargetVel - currLeftVel);
@@ -222,9 +224,9 @@ public class PurePursuitTracker {
 	 */
 	private Optional<Vector> calculateLookAheadPoint(Vector startPoint, Vector endPoint, Vector currPos, double lookaheadDistance, boolean onLastSegment) {
 		Optional<Double> tIntersect = calcIntersectionTVal(startPoint, endPoint, currPos, lookaheadDistance);
-		if (tIntersect.isEmpty() && onLastSegment) {
+		if (!tIntersect.isPresent() && onLastSegment) {
 			return Optional.of(path.getRobotPath().get(path.getRobotPath().size() - 1));
-		} else if (tIntersect.isEmpty()) {
+		} else if (!tIntersect.isPresent()) {
 			return Optional.empty();
 		} else {
 			Vector intersectVector = Vector.sub(endPoint, startPoint, null);
