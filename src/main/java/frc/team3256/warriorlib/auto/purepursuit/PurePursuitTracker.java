@@ -90,8 +90,8 @@ public class PurePursuitTracker {
 		double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
 
 		if (!path.isForward()) {
-            leftTargetVel = -rightTargetVel;
-            rightTargetVel = -leftTargetVel;
+            leftTargetVel = -leftTargetVel;
+            rightTargetVel = -rightTargetVel;
         }
 
 		double leftFeedback = feedbackMultiplier * (leftTargetVel - currLeftVel);
