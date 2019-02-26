@@ -30,8 +30,9 @@ public class AutoModeExecuter {
 	 * Stops execution of the chosen auto mode
 	 */
 	public void stop() {
-		if (autoMode != null)
-			autoMode.stop();
+        if (finished)
+            return;
+        autoMode.stop();
 		autoMode = null;
 		finished = true;
 	}
