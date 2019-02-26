@@ -6,9 +6,11 @@ package frc.team3256.warriorlib.auto;
 public class AutoModeExecuter {
 	private AutoModeBase autoMode;
 	private Thread thread = null;
+	private boolean finished = false;
 
 	public void setAutoMode(AutoModeBase autoMode) {
 		this.autoMode = autoMode;
+		this.autoMode.setAutoModeExecuter(this);
 	}
 
 	/**
@@ -31,5 +33,14 @@ public class AutoModeExecuter {
 		if (autoMode != null)
 			autoMode.stop();
 		autoMode = null;
+		finished = true;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 }
