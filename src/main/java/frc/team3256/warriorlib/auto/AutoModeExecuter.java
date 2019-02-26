@@ -9,6 +9,9 @@ public class AutoModeExecuter {
 	private boolean finished = false;
 
 	public void setAutoMode(AutoModeBase autoMode) {
+        this.finished = false;
+        this.thread = null;
+
 		this.autoMode = autoMode;
 		this.autoMode.setAutoModeExecuter(this);
 	}
