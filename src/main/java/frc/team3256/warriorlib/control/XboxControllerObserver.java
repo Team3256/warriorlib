@@ -28,6 +28,10 @@ public class XboxControllerObserver implements ControllerObserver {
         previousPOV = 0;
     }
 
+    public XboxController getXboxController() {
+        return xboxController;
+    }
+
     public void setListener(XboxListenerBase listener) {
         xboxListenerBase = listener;
     }
