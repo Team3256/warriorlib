@@ -123,14 +123,26 @@ public class SparkMAXUtil {
 	}
 
 	/**
-	 * Sets the amount of secodns it takes to go from 0 power to full throttle
+	 * Sets the amount of seconds it takes to go from 0 power to full throttle (closed loop)
 	 *
 	 * @param seconds Amount of time in seconds SparkMAX takes to ramp to full throttle
 	 * @param sparks  SparkMAX objects
 	 */
-	public static void setRampRate(double seconds, CANSparkMax... sparks) {
+	public static void setClosedLoopRampRate(double seconds, CANSparkMax... sparks) {
 		for (CANSparkMax sparkMax : sparks) {
-			sparkMax.setRampRate(seconds);
+			sparkMax.setClosedLoopRampRate(seconds);
+		}
+	}
+
+	/**
+	 * Sets the amount of seconds it takes to go from 0 power to full throttle (open loop)
+	 *
+	 * @param seconds Amount of time in seconds SparkMAX takes to ramp to full throttle
+	 * @param sparks  SparkMAX objects
+	 */
+	public static void setOpenLoopRampRate(double seconds, CANSparkMax... sparks) {
+		for (CANSparkMax sparkMax : sparks) {
+			sparkMax.setOpenLoopRampRate(seconds);
 		}
 	}
 }
