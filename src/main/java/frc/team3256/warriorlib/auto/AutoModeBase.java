@@ -9,12 +9,18 @@ public abstract class AutoModeBase {
 	protected double updateRate = 1.0 / 50.0;
 	protected boolean active;
 
+    private AutoModeExecuter autoModeExecuter;
+
 	/**
 	 * To be overriden; contains actual code to be executed when action is run
 	 *
 	 * @throws AutoModeEndedException
 	 */
 	protected abstract void routine() throws AutoModeEndedException;
+
+    public void setAutoModeExecuter(AutoModeExecuter autoModeExecuter) {
+        this.autoModeExecuter = autoModeExecuter;
+    }
 
 	/**
 	 * To not be overriden; runs the code in {@link #routine()}
@@ -27,6 +33,8 @@ public abstract class AutoModeBase {
 			System.out.println("Auto mode ended early");
 		}
 		done();
+        if (autoModeExecuter != null)
+            autoModeExecuter.setFinished(true);
 		System.out.println("Auto mode done");
 	}
 
@@ -36,6 +44,8 @@ public abstract class AutoModeBase {
 
 	public void stop() {
 		active = false;
+        if (autoModeExecuter != null)
+            autoModeExecuter.setFinished(true);
 	}
 
 	public boolean isActive() {
