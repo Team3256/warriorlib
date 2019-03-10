@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'edu.wpi.first.GradleRIO' version '2019.3.2'
+    id 'edu.wpi.first.GradleRIO' version '2019.4.1'
 }
 
 sourceCompatibility = 1.8
