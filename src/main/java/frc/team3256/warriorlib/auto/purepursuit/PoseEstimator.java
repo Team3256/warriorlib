@@ -30,6 +30,19 @@ public class PoseEstimator implements Loop {
 		return velocity;
 	}
 
+	public void resetPosition() {
+		velocity = new Twist();
+		pose = new RigidTransform(new Translation(), pose.getRotation());
+		prevPose = new RigidTransform(new Translation(), pose.getRotation());
+		prevLeftDist = 0;
+		prevRightDist = 0;
+	}
+
+	public void offsetPoseAngle(double angle) {
+		pose = new RigidTransform(pose.getTranslation(), pose.getRotation().rotate(Rotation.fromDegrees(angle)));
+		prevPose = new RigidTransform(pose.getTranslation(), pose.getRotation().rotate(Rotation.fromDegrees(angle)));
+	}
+
 	/**
 	 * MUST BE CALLED IMMEDIATELY AFTER RESETTING DRIVETRAIN/GYRO!
 	 */
