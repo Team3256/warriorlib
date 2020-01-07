@@ -79,7 +79,7 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, Sendable
 		calibrate();
 
 		HAL.report(tResourceType.kResourceType_ADXRS450, port.value);
-		setName("ADXRS453_Gyro", port.value);
+		// setName("ADXRS453_Gyro", port.value);
 	}
 
 	public boolean isConnected() {
@@ -176,7 +176,7 @@ public class ADXRS453_Gyro extends GyroBase implements Gyro, PIDSource, Sendable
 	 */
 	@Override
 	public void close() {
-		super.close();
+		// super.close();
 		if (m_spi != null) {
 			m_spi.close();
 			m_spi = null;
