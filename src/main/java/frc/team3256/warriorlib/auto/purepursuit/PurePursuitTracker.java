@@ -19,8 +19,7 @@ public class PurePursuitTracker {
 	private double robotTrack = 0;
 	private double feedbackMultiplier = 0;
 
-
-	private DrivePower targetVels;
+	private DrivePower targetVels = new DrivePower(0, 0);
 
 	private PurePursuitTracker() {
 		reset();
