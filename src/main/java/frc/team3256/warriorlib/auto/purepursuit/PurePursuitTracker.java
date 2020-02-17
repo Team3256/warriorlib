@@ -19,6 +19,9 @@ public class PurePursuitTracker {
 	private double robotTrack = 0;
 	private double feedbackMultiplier = 0;
 
+
+	private DrivePower targetVels;
+
 	private PurePursuitTracker() {
 		reset();
 	}
@@ -109,7 +112,8 @@ public class PurePursuitTracker {
         double leftPower = leftTargetVel + leftFeedback;
         double rightPower = rightTargetVel + rightFeedback;
 
-        return new DrivePower(leftPower, rightPower, true);
+        targetVels = new DrivePower(leftPower, rightPower, true);
+        return targetVels;
 	}
 
     /*
@@ -270,5 +274,9 @@ public class PurePursuitTracker {
 
 	public Path getPath() {
 		return path;
+	}
+
+	public DrivePower getTargetVels() {
+		return targetVels;
 	}
 }
