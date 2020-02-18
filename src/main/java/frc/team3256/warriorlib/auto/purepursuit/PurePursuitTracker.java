@@ -32,7 +32,7 @@ public class PurePursuitTracker {
 		return instance == null ? instance = new PurePursuitTracker() : instance;
 	}
 
-	private void init(double loopTime, double maxAccel, double kV, double kP, double kA) {
+	public void init(double loopTime, double maxAccel, double kV, double kP, double kA) {
 		this.loopTime = loopTime;
 		this.maxAccel = maxAccel;
 		this.kV = kV;
@@ -90,6 +90,7 @@ public class PurePursuitTracker {
 		}
 
 		double curvature = path.calculateCurvatureLookAheadArc(currPose, heading, lookaheadPoint, lookaheadDistance);
+
 		double leftTargetVel = calculateLeftTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
 		double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
 
