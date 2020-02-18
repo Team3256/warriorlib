@@ -19,8 +19,7 @@ public class PurePursuitTracker {
 	private double lookaheadDistance;
 	private double robotTrack = 0;
 	private double loopTime, maxAccel, kV, kP, kA;
-	private double rightOutput = 0, prevRightOutput = 0;
-	private double leftOutput = 0, prevLeftOutput = 0;
+	private double prevTargetVel = 0;
 
 	private DrivePower targetVels = new DrivePower(0, 0);
 
@@ -91,7 +90,10 @@ public class PurePursuitTracker {
 
 		double curvature = path.calculateCurvatureLookAheadArc(currPose, heading, lookaheadPoint, lookaheadDistance);
 
-		double leftTargetVel = calculateLeftTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
+		double targetVel = robotPath.get(getClosestPointIndex(currPose)).getVelocity();
+		rateLimit(targetVel);
+
+		double leftTargetVel = calculateLeftTargetVelocity(, curvature);
 		double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
 
 		if (!path.isForward()) {
@@ -118,8 +120,7 @@ public class PurePursuitTracker {
     private double calculateFF(double targetVel, double currVel, boolean right) {
         double targetAcc = (targetVel - currVel)/(loopTime);
 		targetAcc = Util.clip(targetAcc, -maxAccel, maxAccel);
-        double rateLimitedVel = rateLimiter(targetVel, maxAccel, right);
-        return (kV * rateLimitedVel) + (kA * targetAcc);
+        return (kV * targetVel) + (kA * targetAcc);
     }
 
     private double calculateFB(double targetVel, double currVel) {
@@ -154,19 +155,10 @@ public class PurePursuitTracker {
 
     //limits the rate of change of a value given a maxRate parameter
 
-    private double rateLimiter(double input, double maxRate, boolean right) {
-        double maxChange = loopTime * maxRate;
-        if (right) {
-            rightOutput += Util.clip(input - prevRightOutput, -maxChange, maxChange);
-            prevRightOutput = rightOutput;
-            return rightOutput;
-        }
-        else {
-            leftOutput += Util.clip(input - prevLeftOutput, -maxChange, maxChange);
-            prevLeftOutput = leftOutput;
-            return leftOutput;
-        }
-    }
+    private double rateLimit(double targetVel) {
+		double maxChange = loopTime * maxAccel;
+		return Util.clip(targetVel, -maxChange, maxChange);
+	}
 
 	//calculates the intersection point between a point and a circle
 
