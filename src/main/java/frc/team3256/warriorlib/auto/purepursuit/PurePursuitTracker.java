@@ -93,8 +93,8 @@ public class PurePursuitTracker {
 		double targetVel = robotPath.get(getClosestPointIndex(currPose)).getVelocity();
 		rateLimit(targetVel);
 
-		double leftTargetVel = calculateLeftTargetVelocity(, curvature);
-		double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
+		double leftTargetVel = calculateLeftTargetVelocity(targetVel, curvature);
+		double rightTargetVel = calculateRightTargetVelocity(targetVel, curvature);
 
 		if (!path.isForward()) {
 
@@ -102,8 +102,8 @@ public class PurePursuitTracker {
             rightTargetVel = -rightTargetVel;
         }
 
-        double rightFF = calculateFF(rightTargetVel, currRightVel, true);
-        double leftFF = calculateFF(leftTargetVel, currLeftVel, false);
+        double rightFF = calculateFF(rightTargetVel, currRightVel);
+        double leftFF = calculateFF(leftTargetVel, currLeftVel);
         double rightFB = calculateFB(rightTargetVel, rightTargetVel);
         double leftFB = calculateFB(leftTargetVel, leftTargetVel);
 
@@ -117,9 +117,8 @@ public class PurePursuitTracker {
 
     //calculates the feedForward and the feedBack that will get passed through to the motors
 
-    private double calculateFF(double targetVel, double currVel, boolean right) {
+    private double calculateFF(double targetVel, double currVel) {
         double targetAcc = (targetVel - currVel)/(loopTime);
-		targetAcc = Util.clip(targetAcc, -maxAccel, maxAccel);
         return (kV * targetVel) + (kA * targetAcc);
     }
 
