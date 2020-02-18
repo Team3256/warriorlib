@@ -2,6 +2,7 @@ package frc.team3256.warriorlib.auto.purepursuit;
 
 import frc.team3256.warriorlib.control.DrivePower;
 import frc.team3256.warriorlib.math.Vector;
+import frc.team3256.warriorlib.operations.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,9 @@ public class PurePursuitTracker {
 	private Path path;
 	private double lookaheadDistance;
 	private double robotTrack = 0;
-	private double feedbackMultiplier = 0;
+	private double loopTime, maxAccel, kV, kP, kA;
+	private double rightOutput = 0, prevRightOutput = 0;
+	private double leftOutput = 0, prevLeftOutput = 0;
 
 	private DrivePower targetVels = new DrivePower(0, 0);
 
@@ -27,6 +30,14 @@ public class PurePursuitTracker {
 
 	public static PurePursuitTracker getInstance() {
 		return instance == null ? instance = new PurePursuitTracker() : instance;
+	}
+
+	private void init(double loopTime, double maxAccel, double kV, double kP, double kA) {
+		this.loopTime = loopTime;
+		this.maxAccel = maxAccel;
+		this.kV = kV;
+		this.kP = kP;
+		this.kA = kA;
 	}
 
 	/**
@@ -46,15 +57,6 @@ public class PurePursuitTracker {
 	 */
 	public void setRobotTrack(double robotTrack) {
 		this.robotTrack = robotTrack;
-	}
-
-	/**
-	 * Sets the feedback multiplier (proportional feedback constant) for velocities
-	 *
-	 * @param feedbackMultiplier feedback multiplier
-	 */
-	public void setFeedbackMultiplier(double feedbackMultiplier) {
-		this.feedbackMultiplier = feedbackMultiplier;
 	}
 
 	public void reset() {
@@ -97,39 +99,32 @@ public class PurePursuitTracker {
             rightTargetVel = -rightTargetVel;
         }
 
-		double leftFeedback = feedbackMultiplier * (leftTargetVel - currLeftVel);
-		double rightFeedback = feedbackMultiplier * (rightTargetVel - currRightVel);
-        /*
-        System.out.println("leftTargetVel: " + leftTargetVel);
-        System.out.println("rightTargetVel: " + rightTargetVel);
+        double rightFF = calculateFF(rightTargetVel, currRightVel, true);
+        double leftFF = calculateFF(leftTargetVel, currLeftVel, false);
+        double rightFB = calculateFB(rightTargetVel, rightTargetVel);
+        double leftFB = calculateFB(leftTargetVel, leftTargetVel);
 
-        double rightFF = calculateFeedForward(rightTargetVel, currVel, true);
-        double leftFF = calculateFeedForward(leftTargetVel, currVel, false);
-        double rightFB = calculateFeedback(rightTargetVel, currVel);
-        double leftFB = calculateFeedback(leftTargetVel, currVel);
-        */
-        double leftPower = leftTargetVel + leftFeedback;
-        double rightPower = rightTargetVel + rightFeedback;
+        double leftPower = leftFF + leftFB;
+        double rightPower = rightFF + rightFB;
 
         targetVels = new DrivePower(leftPower, rightPower, true);
         return targetVels;
 	}
 
-    /*
+
     //calculates the feedForward and the feedBack that will get passed through to the motors
 
-    private double calculateFeedForward(double targetVel, double currVel, boolean right) {
-        double targetAcc = (targetVel - currVel)/(Constants.loopTime);
-		double maxAccel = Constants.maxAccel;
-		targetAcc = Range.clip(targetAcc, -maxAccel, maxAccel);
+    private double calculateFF(double targetVel, double currVel, boolean right) {
+        double targetAcc = (targetVel - currVel)/(loopTime);
+		targetAcc = Util.clip(targetAcc, -maxAccel, maxAccel);
         double rateLimitedVel = rateLimiter(targetVel, maxAccel, right);
-        return (Constants.kV * rateLimitedVel) + (Constants.kA * targetAcc);
+        return (kV * rateLimitedVel) + (kA * targetAcc);
     }
 
-    private double calculateFeedback(double targetVel, double currVel) {
-        return Constants.kP * (targetVel - currVel);
+    private double calculateFB(double targetVel, double currVel) {
+        return kP * (targetVel - currVel);
     }
-    */
+
 
 	//calculates the left and right target velocities given the targetRobotVelocity
 
@@ -156,23 +151,21 @@ public class PurePursuitTracker {
 		return targetRobotVelocity * ((2 - (robotTrack * curvature))) / 2;
 	}
 
-    /*
     //limits the rate of change of a value given a maxRate parameter
 
     private double rateLimiter(double input, double maxRate, boolean right) {
-        double maxChange = Constants.loopTime * maxRate;
+        double maxChange = loopTime * maxRate;
         if (right) {
-            rightOutput += Range.clip(input - prevRightOutput, -maxChange, maxChange);
+            rightOutput += Util.clip(input - prevRightOutput, -maxChange, maxChange);
             prevRightOutput = rightOutput;
             return rightOutput;
         }
         else {
-            leftOutput += Range.clip(input - prevLeftOutput, -maxChange, maxChange);
+            leftOutput += Util.clip(input - prevLeftOutput, -maxChange, maxChange);
             prevLeftOutput = leftOutput;
             return leftOutput;
         }
     }
-    */
 
 	//calculates the intersection point between a point and a circle
 

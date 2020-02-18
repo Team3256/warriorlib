@@ -170,6 +170,8 @@ public class Path {
 		}
 	}
 
+
+
 	public void setDistances() {
 		double distance = 0;
 		getStartPoint().setDistance(0);
