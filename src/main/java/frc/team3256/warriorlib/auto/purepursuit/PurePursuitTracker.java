@@ -13,11 +13,13 @@ import java.util.Optional;
 public class PurePursuitTracker {
 	private static PurePursuitTracker instance;
 	private int lastClosestPoint;
-    private List<Path> paths = new ArrayList<>();
+	private List<Path> paths = new ArrayList<>();
 	private Path path;
 	private double lookaheadDistance;
 	private double robotTrack = 0;
 	private double feedbackMultiplier = 0;
+
+	private DrivePower targetVels = new DrivePower(0, 0);
 
 	private PurePursuitTracker() {
 		reset();
@@ -32,7 +34,7 @@ public class PurePursuitTracker {
 	 *
 	 * @param lookaheadDistance lookahead distance (ideally between 15-24 inches)
 	 */
-    public void setPaths(List<Path> paths, double lookaheadDistance) {
+	public void setPaths(List<Path> paths, double lookaheadDistance) {
 		reset();
 		this.paths = paths;
 		this.lookaheadDistance = lookaheadDistance;
@@ -90,9 +92,10 @@ public class PurePursuitTracker {
 		double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
 
 		if (!path.isForward()) {
-            leftTargetVel = -leftTargetVel;
-            rightTargetVel = -rightTargetVel;
-        }
+
+			leftTargetVel = -leftTargetVel;
+			rightTargetVel = -rightTargetVel;
+		}
 
 		double leftFeedback = feedbackMultiplier * (leftTargetVel - currLeftVel);
 		double rightFeedback = feedbackMultiplier * (rightTargetVel - currRightVel);
@@ -105,10 +108,11 @@ public class PurePursuitTracker {
         double rightFB = calculateFeedback(rightTargetVel, currVel);
         double leftFB = calculateFeedback(leftTargetVel, currVel);
         */
-        double leftPower = leftTargetVel + leftFeedback;
-        double rightPower = rightTargetVel + rightFeedback;
+		double leftPower = leftTargetVel + leftFeedback;
+		double rightPower = rightTargetVel + rightFeedback;
 
-        return new DrivePower(leftPower, rightPower, true);
+		targetVels = new DrivePower(leftPower, rightPower, true);
+		return targetVels;
 	}
 
     /*
@@ -263,11 +267,15 @@ public class PurePursuitTracker {
 		return getClosestPointIndex(PoseEstimator.getInstance().getPose()) == path.getRobotPath().size() - 1;
 	}
 
-    public void setPath(Integer pathIndex) {
+	public void setPath(Integer pathIndex) {
 		this.path = paths.get(pathIndex);
 	}
 
 	public Path getPath() {
 		return path;
+	}
+
+	public DrivePower getTargetVels() {
+		return targetVels;
 	}
 }

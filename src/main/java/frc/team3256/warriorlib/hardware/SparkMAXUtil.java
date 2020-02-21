@@ -23,6 +23,8 @@ public class SparkMAXUtil {
 	public static CANSparkMax generateGenericSparkMAX(int id, CANSparkMaxLowLevel.MotorType type) {
 		CANSparkMax sparkMax = new CANSparkMax(id, type);
 		sparkMax.setInverted(false);
+		sparkMax.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		sparkMax.burnFlash();
 		return sparkMax;
 	}
 
