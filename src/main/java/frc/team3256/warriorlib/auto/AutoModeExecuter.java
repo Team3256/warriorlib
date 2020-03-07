@@ -1,5 +1,7 @@
 package frc.team3256.warriorlib.auto;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 /**
  * Executes the chosen autonomous mode
  */
@@ -27,6 +29,8 @@ public class AutoModeExecuter {
 			});
 			thread.start();
 		}
+		if (!DriverStation.getInstance().isAutonomous())
+			stop();
 	}
 
 	/**
