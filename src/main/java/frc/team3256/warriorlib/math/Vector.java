@@ -167,10 +167,11 @@ public class Vector {
 		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
 	}
 
-	public void add(Vector v) {
+	public Vector add(Vector v) {
 		x += v.x;
 		y += v.y;
 		z += v.z;
+		return this;
 	}
 
 	public void add(double x, double y, double z) {
@@ -179,10 +180,11 @@ public class Vector {
 		this.z += z;
 	}
 
-	public void sub(Vector a) {
+	public Vector sub(Vector a) {
 		x -= a.x;
 		y -= a.y;
 		z -= a.z;
+		return this;
 	}
 
 	public void sub(double x, double y, double z) {
@@ -197,10 +199,11 @@ public class Vector {
 		z *= n;
 	}
 
-	public void mult(Vector a) {
+	public Vector mult(Vector a) {
 		x *= a.x;
 		y *= a.y;
 		z *= a.z;
+		return this;
 	}
 
 	public void div(double n) {
@@ -209,10 +212,11 @@ public class Vector {
 		z /= n;
 	}
 
-	public void div(Vector a) {
+	public Vector div(Vector a) {
 		x /= a.x;
 		y /= a.y;
 		z /= a.z;
+		return this;
 	}
 
 	public Vector div(Vector a, Vector b) {
