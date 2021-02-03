@@ -18,6 +18,7 @@ public class PurePursuitTracker {
 	private double lookaheadDistance;
 	private double robotTrack = 0;
 	private double feedbackMultiplier = 0;
+	private int closestPointLimit = 0;
 
 	private DrivePower targetVels = new DrivePower(0, 0);
 
@@ -27,6 +28,15 @@ public class PurePursuitTracker {
 
 	public static PurePursuitTracker getInstance() {
 		return instance == null ? instance = new PurePursuitTracker() : instance;
+	}
+
+	/**
+	 * Sets limit for calculation of the closest point on the path to the robot
+	 * @param closestPointLimit: maximum number of points in front of previous closest point searched to be current closest point,
+	 *                         nonpositive values means the whole path is searched
+	 */
+	public void setClosestPointLimit(int closestPointLimit){
+		this.closestPointLimit = closestPointLimit;
 	}
 
 	/**
@@ -87,9 +97,10 @@ public class PurePursuitTracker {
 			}
 		}
 
+		double velocity = robotPath.get(getClosestPointIndex(currPose)).getVelocity();
 		double curvature = path.calculateCurvatureLookAheadArc(currPose, heading, lookaheadPoint, lookaheadDistance);
-		double leftTargetVel = calculateLeftTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
-		double rightTargetVel = calculateRightTargetVelocity(robotPath.get(getClosestPointIndex(currPose)).getVelocity(), curvature);
+		double leftTargetVel = calculateLeftTargetVelocity(velocity, curvature);
+		double rightTargetVel = calculateRightTargetVelocity(velocity, curvature);
 
 		if (!path.isForward()) {
 
@@ -247,9 +258,11 @@ public class PurePursuitTracker {
 	 */
 	private int getClosestPointIndex(Vector currPos) {
 		double shortestDistance = Double.MAX_VALUE;
-		int closestPoint = 0;
 		ArrayList<Vector> robotPath = path.getRobotPath();
-		for (int i = lastClosestPoint; i < robotPath.size(); i++) {
+		int closestPoint = robotPath.size()-1;
+		int lastPointToSearch = closestPointLimit > 0 ? lastClosestPoint + closestPointLimit : robotPath.size()-1;
+		lastPointToSearch = Math.min(lastPointToSearch, robotPath.size()-1);	// make sure the searched points do not exceed robotPath
+		for (int i = lastClosestPoint; i <= lastPointToSearch; i++) {
 			if (Vector.dist(robotPath.get(i), currPos) < shortestDistance) {
 				closestPoint = i;
 				shortestDistance = Vector.dist(robotPath.get(i), currPos);
