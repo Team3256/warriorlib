@@ -112,7 +112,7 @@ public class Vector {
 	}
 
 	static public double dist(Vector a, Vector b) {
-		double dx = a.x - a.x;
+		double dx = a.x - b.x;
 		double dy = a.y - b.y;
 		double dz = a.z - b.z;
 		return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
