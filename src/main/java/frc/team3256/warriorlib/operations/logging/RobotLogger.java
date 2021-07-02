@@ -27,7 +27,7 @@ public class RobotLogger {
     public static int HTML_LOG_MAX_FILES = 3;
 
     //Normal Max File Sizes
-    public static int TXT_LOG_MAX_SIZE  = 100000000; // In Bytes
+    public static int TXT_LOG_MAX_SIZE  = 3000000; // In Bytes
     public static int HTML_LOG_MAX_SIZE = 100000000; // In Bytes
 
     //File Names (%g is for Numbering of Files)
@@ -82,21 +82,23 @@ public class RobotLogger {
      * Logs to USB Drive with HTML + Text
      */
     static private void normalLog(String pathToLogInto){
-        Path txtFilePath = Paths.get(pathToLogInto, TXT_FILE_NAME);
+        String homePath = Filesystem.getOperatingDirectory().getAbsolutePath();
+
+        //Backup Text File, In case USB gets corrupted
+        Path txtFilePath = Paths.get(homePath, TXT_FILE_NAME);
+
         Path htmlFilePath = Paths.get(pathToLogInto, HTML_FILE_NAME);
 
         try {
-            FileHandler fileTxtHandler = new FileHandler(
-                    txtFilePath.toString(), TXT_LOG_MAX_SIZE, TXT_LOG_MAX_FILES, false);
             FileHandler fileHTMLHandler = new FileHandler(
                     htmlFilePath.toString(), HTML_LOG_MAX_SIZE, HTML_LOG_MAX_FILES, false);
-
-
-            fileTxtHandler.setFormatter(new OneLineFormatter());
-            globalLogger.addHandler(fileTxtHandler);
+            FileHandler fileTxtHandler = new FileHandler(
+                    txtFilePath.toString(), TXT_LOG_MAX_SIZE, TXT_LOG_MAX_FILES, false);
 
             fileHTMLHandler.setFormatter(new HtmlFormatter());
             globalLogger.addHandler(fileHTMLHandler);
+            fileTxtHandler.setFormatter(new OneLineFormatter());
+            globalLogger.addHandler(fileTxtHandler);
 
         } catch(IOException e){
             System.err.println("Normal Log FAILED - IOException - Going to Emergency Log");
